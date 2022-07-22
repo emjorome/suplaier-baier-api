@@ -1,4 +1,3 @@
-
 var express = require('express');
 
 
@@ -11,8 +10,8 @@ router.get('/', function(req, res, next) {
   req.getConnection((err, conn) =>{
     if(err) return res.send(err);
     conn.query(
-      `SELECT * FROM Producto p 
-        WHERE ProductoId = COALESCE(${id}, p.ProductoId) 
+      `SELECT * FROM Proveedor prov 
+        WHERE IdProveedor = COALESCE(${id}, p.IdProveedor) 
         AND Nombre = COALESCE(${nombre}, p.Nombre)`, 
       (err, rows) => {
         res.json(rows);
@@ -22,14 +21,27 @@ router.get('/', function(req, res, next) {
 
 router.post('/', function(req, res){
     const { title, director, year, rating } = req.body;
-    let query = `INSERT INTO Producto VALUES ${req.res}`;
-    RTCPeerConnection.query()
+    let query = `INSERT INTO Proveedor VALUES ${req.res}`;
+});
+
+
+router.post('/auth', (req, res) => {
+    const {usuario, pass} = req.body;
+    req.getConnection((err, conn) =>{
+        if(err) return res.send(err);
+        conn.query(
+          `CALL AutenticarProveedor(${usuario}, ${pass})`, 
+          (err, rows) => {
+            if(err) console.log(err);
+            res.json(rows);
+        });
+    });
 });
 
 router.put('/:id', function(req, res){
     const { id } = req.params;
     const { nombre, precio } = req.body;
-    let sql = `UPDATE Producto SET nombre = ${nombre}, [precio = ${precio} WHERE ProductoId = ${id}`;
+    let sql = `UPDATE Proveedor SET nombre = ${nombre} WHERE ProductoId = ${id}`;
 
 });
 
