@@ -6,15 +6,16 @@ const app = express();
 const connection = '';
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  const {id, nombre} = req.query;
+  const id = req.query.id === undefined ? null : req.query.id;
+  const nombre = req.query.nombre === undefined ? null : req.query.nombre;
   req.getConnection((err, conn) =>{
     if(err) return res.send(err);
     conn.query(
-      `SELECT * FROM Proveedor prov 
-        WHERE IdProveedor = COALESCE(${id}, p.IdProveedor) 
-        AND Nombre = COALESCE(${nombre}, p.Nombre)`, 
+      `SELECT * FROM Proveedor p WHERE IdProveedor = COALESCE(${id}, p.IdProveedor)
+      AND Nombre = COALESCE(${nombre}, p.Nombre)`, 
       (err, rows) => {
-        res.json(rows);
+        if(err) res.json(err);
+        res.json({rows});
     });
   });
 });

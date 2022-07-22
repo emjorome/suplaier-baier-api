@@ -1,5 +1,19 @@
-CREATE DATABASE DbContabilly;
+CREATE DATABASE IF NOT EXISTS DbContabilly;
 USE DbContabilly;
+
+CREATE TABLE Administrador (
+	IdProveedor INT AUTO_INCREMENT PRIMARY KEY,
+	Nombre VARCHAR(100),
+	Identificacion VARCHAR(13),
+	Usuario VARCHAR(20),
+	Contrasena VARCHAR(50),
+	Email VARCHAR(50),
+	Numero VARCHAR(20),
+	Pais VARCHAR(50),
+	Ciudad VARCHAR(50),
+	Direccion VARCHAR(200)
+);
+
 CREATE TABLE Proveedor (
 	IdProveedor INT AUTO_INCREMENT PRIMARY KEY,
 	Nombre VARCHAR(100),
@@ -11,6 +25,12 @@ CREATE TABLE Proveedor (
 	Pais VARCHAR(50),
 	Ciudad VARCHAR(50),
 	Direccion VARCHAR(200)
+);
+
+CREATE TABLE CatProducto(
+	IdCatProducto INT AUTO_INCREMENT PRIMARY KEY,
+    Nombre VARCHAR(50),
+    GoogleCodeRoundedIcon VARCHAR(20)
 );
                         
 CREATE TABLE Producto (
@@ -25,11 +45,21 @@ CREATE TABLE Producto (
 	FechaModificacion DATETIME,
 	Valoracion FLOAT
 );
+
+#ADD ID_PROVEEDOR TO PRODUCT
+ALTER TABLE Producto
+ADD IdProveedor INT,
+ADD	FOREIGN KEY (IdProveedor) REFERENCES Proveedor(IdProveedor);
+
+#ADD ID_CATEGORY TO PRODUCT
+ALTER TABLE Producto
+ADD IdCatProducto INT,
+ADD FOREIGN KEY (IdCatProducto) REFERENCES CatProducto(IdCatProducto); 
                         
 CREATE TABLE Comprador (
 	IdComprador INT AUTO_INCREMENT PRIMARY KEY,
 	Nombre VARCHAR(100),
-	Identifcacion VARCHAR(13),
+	Identificacion VARCHAR(13),
 	Usuario VARCHAR(20),
 	Contrasena VARCHAR(50),
 	Email VARCHAR(50),
@@ -38,6 +68,7 @@ CREATE TABLE Comprador (
 	Ciudad VARCHAR(50),
 	Direccion VARCHAR(200)
 );
+
 CREATE TABLE Publicacion(
 	IdPublicacion INT AUTO_INCREMENT PRIMARY KEY,
 	IdProducto INT ,
@@ -52,6 +83,12 @@ CREATE TABLE Publicacion(
 	FOREIGN KEY (IdProducto) REFERENCES Producto(IdProducto)
 );
 
+CREATE TABLE TipoNotificacion(
+	IdTipoNotificacion INT AUTO_INCREMENT PRIMARY KEY,
+    Tipo VARCHAR(20),
+    GoogleCodeRoundedIcon VARCHAR(20)
+);
+
 CREATE TABLE Notificacion (
 	IdNotificacion INT AUTO_INCREMENT PRIMARY KEY,
 	IdUsuario INT,
@@ -61,6 +98,11 @@ CREATE TABLE Notificacion (
     FOREIGN KEY (IdUsuario) REFERENCES Comprador(IdComprador),
     FOREIGN KEY (IdPublicacion) REFERENCES Publicacion(IdPublicacion)
 );
+
+#ADD TIPO DE NOTIFICACION
+ALTER TABLE Notificacion
+ADD IdTipoNotificacion INT,
+ADD	FOREIGN KEY (IdTipoNotificacion) REFERENCES TipoNotificacion(IdTipoNotificacion);
 
 CREATE TABLE EstadosOferta(
 	IdEstadosOferta INT AUTO_INCREMENT PRIMARY KEY,
@@ -111,3 +153,32 @@ CREATE TABLE Compra(
     FOREIGN KEY (IdProveedor) REFERENCES Proveedor(IdProveedor),
     FOREIGN KEY (IdOfertaComprador) REFERENCES OfertaComprador(IdOfertaComprador)
 );
+
+#INSERT QUERIES
+
+INSERT INTO Comprador(Nombre, Identificacion, Usuario, Contrasena, Email, Numero, Pais, Ciudad, Direccion) VALUES 
+('Walther Duran', '1205801515', 'wduran', 'wduran1234', 'wduran@gmail.com', '+593998950947', 'Ecuador', 'Guayaquil', 'Samanes'),
+('Karla Duran', '1205801516', 'kduran', 'kduran1234', 'kduran@gmail.com', '+593998950948', 'Ecuador', 'Guayaquil', 'Samanes');
+
+INSERT INTO Proveedor(Nombre, Identificacion, Usuario, Contrasena, Email, Numero, Pais, Ciudad, Direccion) VALUES 
+('Helena Crespo', '0905801320', 'hcrespo', 'hcrespo1234', 'hcrespo@gmail.com', '+593998950948', 'Austria', 'Vienna', 'Auskunft-022'),
+('Algodón S.A.', '0905801320', 'algodonsa', 'algodonsa1234', 'algodonsa@gmail.com', '+593998950948', 'Ecuador', 'Babahoyo', 'Calle 42'),
+('Electrika', '0905801320', 'electrika', 'electrika1234', 'electrika@gmail.com', '+593998950948', 'Ecuador', 'Manta', 'Calle 23'),
+('Agrícola S.A.', '0905801320', 'agricola', 'agricola1234', 'agricola@gmail.com', '+593998950948', 'Ecuador', 'Ventanas', 'Calle 13'),
+('Brocolistos', '0905801320', 'brocolistos', 'brocolistos1234', 'brocolistos@gmail.com', '+593998950948', 'Ecuador', 'Guayaquil', 'Sur');
+
+INSERT INTO Administrador(Nombre, Identificacion, Usuario, Contrasena, Email, Numero, Pais, Ciudad, Direccion) VALUES 
+('Carlos Duran', '1205801325', 'cduran', 'cduran1234', 'cduran@gmail.com', '+593998950948', 'Ecuador', 'Guayaquil', 'Auskunft-022');
+
+INSERT INTO TipoNotificacion(Tipo, GoogleCodeRoundedIcon) VALUES
+('cambio_estado', 'change_circle');
+
+INSERT INTO CatProducto(Nombre, GoogleCodeRoundedIcon) VALUES
+('Artesanías', 'pan_tool'),
+('Frutas', 'atr'),
+('Legumbres', 'local_florist'),
+('Materia Prima', 'emoji_objects'),
+('Vestimenta', 'checkroom'),
+('Construcción', 'construction'),
+('Varios', 'sports_soccer');
+ 

@@ -15,7 +15,8 @@ router.get('/', function(req, res, next) {
         WHERE ProductoId = COALESCE(${id}, p.ProductoId) 
         AND Nombre = COALESCE(${nombre}, p.Nombre)`, 
       (err, rows) => {
-        res.json(rows);
+        if(err) res.json(err);
+        res.json({rows});
     });
   });
 });
