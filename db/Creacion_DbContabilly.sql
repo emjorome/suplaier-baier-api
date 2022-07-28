@@ -99,6 +99,11 @@ CREATE TABLE Publicacion(
 	FOREIGN KEY (IdProducto) REFERENCES Producto(IdProducto)
 );
 
+#ADD IDPROVEEDOR TO PUBLICACION
+ALTER TABLE Publicacion
+ADD IdProveedor INT,
+ADD FOREIGN KEY (IdProveedor) REFERENCES Proveedor(IdProveedor);
+
 #ADD TIPO DE ESTADO
 ALTER TABLE Publicacion
 ADD IdEstadoOferta INT,
