@@ -46,6 +46,11 @@ CREATE TABLE Producto (
 	Valoracion FLOAT
 );
 
+#DROP COLUMNS: VALORCOMPRA VALORVENTA FROM PRODUCTO
+ALTER TABLE Producto
+DROP COLUMN ValorCompra,
+DROP COLUMN ValorVenta;
+
 #ADD ID_PROVEEDOR TO PRODUCT
 ALTER TABLE Producto
 ADD IdProveedor INT,
@@ -55,6 +60,17 @@ ADD	FOREIGN KEY (IdProveedor) REFERENCES Proveedor(IdProveedor);
 ALTER TABLE Producto
 ADD IdCatProducto INT,
 ADD FOREIGN KEY (IdCatProducto) REFERENCES CatProducto(IdCatProducto); 
+
+#ADD BLOB TO PRODUCT
+ALTER TABLE Producto
+ADD UrlImg TEXT;
+
+#ALTER TABLE Producto
+#DROP COLUMN UrlImg;
+
+#ADD NAME TO PRODUCT
+ALTER TABLE Producto
+ADD Name VARCHAR(100);
                         
 CREATE TABLE Comprador (
 	IdComprador INT AUTO_INCREMENT PRIMARY KEY,
@@ -83,6 +99,11 @@ CREATE TABLE Publicacion(
 	FOREIGN KEY (IdProducto) REFERENCES Producto(IdProducto)
 );
 
+#ADD TIPO DE ESTADO
+ALTER TABLE Publicacion
+ADD IdEstadoOferta INT,
+ADD	FOREIGN KEY (IdEstadoOferta) REFERENCES EstadoOferta(IdEstadoOferta);
+
 CREATE TABLE TipoNotificacion(
 	IdTipoNotificacion INT AUTO_INCREMENT PRIMARY KEY,
     Tipo VARCHAR(20),
@@ -104,12 +125,13 @@ ALTER TABLE Notificacion
 ADD IdTipoNotificacion INT,
 ADD	FOREIGN KEY (IdTipoNotificacion) REFERENCES TipoNotificacion(IdTipoNotificacion);
 
-CREATE TABLE EstadosOferta(
-	IdEstadosOferta INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE EstadoOferta(
+	IdEstadoOferta INT AUTO_INCREMENT PRIMARY KEY,
     Descripcion Varchar(50),
     FechaCrea DATETIME,
     Activo BOOL
 );
+
 
 CREATE TABLE OfertaComprador(
 	IdOfertaComprador INT AUTO_INCREMENT PRIMARY KEY,
@@ -154,6 +176,14 @@ CREATE TABLE Compra(
     FOREIGN KEY (IdOfertaComprador) REFERENCES OfertaComprador(IdOfertaComprador)
 );
 
+CREATE TABLE ProvFavorito(
+	IdProvFavorito INT AUTO_INCREMENT PRIMARY KEY,
+    IdComprador INT,
+    IdProveedor INT,
+    FOREIGN KEY (IdComprador) REFERENCES Comprador(IdComprador),
+    FOREIGN KEY (IdProveedor) REFERENCES Proveedor(IdProveedor)
+);
+
 #INSERT QUERIES
 
 INSERT INTO Comprador(Nombre, Identificacion, Usuario, Contrasena, Email, Numero, Pais, Ciudad, Direccion) VALUES 
@@ -181,4 +211,13 @@ INSERT INTO CatProducto(Nombre, GoogleCodeRoundedIcon) VALUES
 ('Vestimenta', 'checkroom'),
 ('Construcción', 'construction'),
 ('Varios', 'sports_soccer');
+
+INSERT INTO ProvFavorito(IdComprador, IdProveedor) VALUES
+(1,2),
+(1,3),
+(1,4),
+(1,5); 
+
+INSERT INTO EstadoOferta(Descripcion, FechaCrea, Activo) VALUES
+('En curso', CURDATE(), true);
  

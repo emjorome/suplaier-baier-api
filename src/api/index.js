@@ -7,6 +7,9 @@ const proveedores = require('./proveedores');
 const compras = require('./compras');
 const notificaciones = require('./notificaciones');
 const catProductos = require('./catProductos');
+const provFavoritos = require('./provFavoritos');
+const estados = require('./estados');
+
 const router = express.Router();
 
 router.get('/', (req, res) => {
@@ -22,5 +25,7 @@ router.use('/proveedores',proveedores);
 router.use('/compras', compras);
 router.use('/notificaciones', notificaciones);
 router.use('/catProductos', catProductos);
+router.use('/provFavoritos', provFavoritos);
+router.use('/estados', estados);
 
 module.exports = router;

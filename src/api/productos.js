@@ -7,13 +7,15 @@ const app = express();
 const connection = '';
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  const {id, nombre} = req.query;
+  const id = req.query.id === undefined ? null : req.query.id;
+  const idProveedor = req.query.idProveedor === undefined ? null : req.query.idProveedor;
+
   req.getConnection((err, conn) =>{
     if(err) return res.send(err);
     conn.query(
       `SELECT * FROM Producto p 
-        WHERE ProductoId = COALESCE(${id}, p.ProductoId) 
-        AND Nombre = COALESCE(${nombre}, p.Nombre)`, 
+        WHERE IdProducto = COALESCE(${id}, p.IdProducto) 
+        AND IdProveedor = COALESCE(${idProveedor}, p.IdProveedor)`, 
       (err, rows) => {
         if(err) res.json(err);
         res.json({rows});
@@ -21,10 +23,19 @@ router.get('/', function(req, res, next) {
   });
 });
 
-router.post('/', function(req, res){
-    const { title, director, year, rating } = req.body;
-    let query = `INSERT INTO Producto VALUES ${req.res}`;
-    RTCPeerConnection.query()
+router.post('/',function(req, res){
+    const { Name, Descripcion, Stock, ValorU, Activo, FechaCreacion, FechaModificacion, Valoracion, IdProveedor, IdCatProducto, UrlImg} = req.body;
+    req.getConnection((err, conn) =>{
+      if (err) return res.send(err);
+      conn.query(
+        `INSERT INTO Producto (Descripcion, Stock, ValorU, Activo, FechaCreacion, FechaModificacion, Valoracion, Name, IdCatProducto, IdProveedor, UrlImg) VALUES 
+        ('${Descripcion}', ${Stock}, ${ValorU}, ${Activo}, '${FechaCreacion}', '${FechaModificacion}', ${Valoracion}, '${Name}', ${IdCatProducto}, ${IdProveedor}, '${UrlImg}')`,
+        (err, rows) => {
+          if(err) res.json(err);
+          res.json("Producto creado exitosamente");
+        }
+      );
+    })
 });
 
 router.put('/:id', function(req, res){

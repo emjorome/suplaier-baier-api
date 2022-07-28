@@ -4,9 +4,10 @@ var express = require('express');
 var router = express.Router();
 const app = express();
 const connection = '';
+
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-  const id = req.query.id === undefined ? null : req.query.id;
+  const id = req.query.idComprador === undefined ? null : req.query.idComprador;
   const nombre = req.query.nombre === undefined ? null : req.query.nombre;
   req.getConnection((err, conn) =>{
     if(err) return res.send(err);
