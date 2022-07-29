@@ -9,7 +9,7 @@ const notificaciones = require('./notificaciones');
 const catProductos = require('./catProductos');
 const provFavoritos = require('./provFavoritos');
 const estados = require('./estados');
-
+const pubByCategoria = require('./pubByCategoria');
 const router = express.Router();
 
 router.get('/', (req, res) => {
@@ -27,5 +27,6 @@ router.use('/notificaciones', notificaciones);
 router.use('/catProductos', catProductos);
 router.use('/provFavoritos', provFavoritos);
 router.use('/estados', estados);
+router.use('/pubByCategoria', pubByCategoria);
 
 module.exports = router;
