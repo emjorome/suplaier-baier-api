@@ -34,4 +34,16 @@ router.post('/', (req, res, next) =>{
   });
 });
 
+router.post('/join', (req, res, next) => {
+  const {IdPublicacion, IdUsuario, Cantidad} = req.body;
+  req.getConnection((err, conn) => {
+    if(err) return res.send(err);
+    conn.query(
+      `CALL UnirseOferta ("${IdPublicacion}","${IdUsuario}", ${Cantidad})`, 
+          (err, rows) => {
+            if(err) console.log(err);
+            res.json(rows[0]);
+    });
+  });
+});
 module.exports = router;
