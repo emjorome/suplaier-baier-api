@@ -9,9 +9,12 @@ BEGIN
 	IF ( totalCantidad <= maximoProductos) THEN
 		INSERT INTO OfertaComprador(IdPublicacion, IdComprador, Cantidad) 
 		VALUES(IdPublicacion, IdUsuario, Cantidad);
+        INSERT INTO Compra(IdProveedor, IdComprador, IdOferta, Cantidad, Fecha, PagadoAProveedor)
+        VALUES(1, 1, 1, Cantidad,NOW(), False);
 		IF (totalCantidad < maximoProductos) THEN
-			UPDATE Publicacion p 
+			UPDATE Publicacion p #En este punto inicia la compra para el comprador CREA REGISTRO EN COMPRA Y MANEJAR ESTADOS DESDE AHI!!! 
 			SET p.ActualProductos = (p.ActualProductos + Cantidad), p.Estado = (SELECT IdEstadosOferta FROM EstadosOferta WHERE Descripcion = 'EN CURSO');
+            
         ELSE
 			UPDATE Publicacion p 
             SET p.ActualProductos = (p.ActualProductos + Cantidad), p.Estado = (SELECT IdEstadosOferta FROM EstadosOferta WHERE Descripcion = 'CERRADA');
