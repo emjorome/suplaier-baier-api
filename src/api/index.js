@@ -1,7 +1,7 @@
 const express = require('express');
 
 const productos = require('./productos');
-const publicaciones = require('./publicaciones');
+const ofertas = require('./ofertas');
 const compradores = require('./compradores');
 const proveedores = require('./proveedores');
 const compras = require('./compras');
@@ -10,6 +10,10 @@ const catProductos = require('./catProductos');
 const provFavoritos = require('./provFavoritos');
 const estados = require('./estados');
 const pubByCategoria = require('./pubByCategoria');
+const usuarios = require('./usuarios');
+const autenticacion = require('./auth');
+const ofertaByProducto = require('./ofertaByProducto');
+
 const router = express.Router();
 
 router.get('/', (req, res) => {
@@ -19,7 +23,7 @@ router.get('/', (req, res) => {
 });
 
 router.use('/productos', productos);
-router.use('/publicaciones', publicaciones)
+router.use('/ofertas', ofertas)
 router.use('/compradores', compradores);
 router.use('/proveedores',proveedores);
 router.use('/compras', compras);
@@ -28,5 +32,8 @@ router.use('/catProductos', catProductos);
 router.use('/provFavoritos', provFavoritos);
 router.use('/estados', estados);
 router.use('/pubByCategoria', pubByCategoria);
+router.use('/usuarios', usuarios);
+router.use('/auth', autenticacion);
+router.use('/ofertabyproducto', ofertaByProducto);
 
 module.exports = router;

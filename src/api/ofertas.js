@@ -1,17 +1,17 @@
 var express = require('express');
 var router = express.Router();
 
-/* GET users listing. */
+/* GET ofertas listing. */
 router.get('/', function(req, res, next) {
   const id = req.query.id === undefined ? null : req.query.id;
   const idProveedor = req.query.idProveedor === undefined ? null : req.query.idProveedor;
-  const idEstadoOferta = req.query.idEstadoOferta === undefined ? null : req.query.idEstadoOferta;
+  const idEstadosOferta = req.query.idEstadosOferta === undefined ? null : req.query.idEstadosOferta;
   req.getConnection((err, conn) =>{
     if(err) return res.send(err);
     conn.query(
-      `SELECT * FROM Publicacion pu WHERE IdPublicacion = COALESCE(${id}, pu.IdPublicacion)
-      AND IdProveedor = COALESCE(${idProveedor}, pu.IdProveedor)
-      AND IdEstadoOferta = COALESCE(${idEstadoOferta}, pu.IdEstadoOferta)`, 
+      `SELECT * FROM Oferta WHERE IdOferta = COALESCE(${id}, Oferta.IdOferta)
+      AND IdProveedor = COALESCE(${idProveedor}, Oferta.IdProveedor)
+      AND IdEstadosOferta = COALESCE(${idEstadosOferta}, Oferta.IdEstadosOferta)`, 
       (err, rows) => {
         if(err) res.json(err);
         res.json({rows});
@@ -34,16 +34,18 @@ router.post('/', (req, res, next) =>{
   });
 });
 
-router.post('/join', (req, res, next) => {
-  const {IdPublicacion, IdUsuario, Cantidad} = req.body;
-  req.getConnection((err, conn) => {
-    if(err) return res.send(err);
-    conn.query(
-      `CALL UnirseOferta ("${IdPublicacion}","${IdUsuario}", ${Cantidad})`, 
-          (err, rows) => {
-            if(err) console.log(err);
-            res.json(rows[0]);
-    });
-  });
-});
+// router.post('/join', (req, res, next) => {
+//   const {IdPublicacion, IdUsuario, Cantidad} = req.body;
+//   req.getConnection((err, conn) => {
+//     if(err) return res.send(err);
+//     conn.query(
+//       `CALL UnirseOferta ("${IdPublicacion}","${IdUsuario}", ${Cantidad})`, 
+//           (err, rows) => {
+//             if(err) console.log(err);
+//             res.json(rows[0]);
+//     });
+//   });
+// });
+
+
 module.exports = router;

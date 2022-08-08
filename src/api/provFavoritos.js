@@ -13,8 +13,8 @@ router.get('/', function(req, res, next) {
     if(err) return res.send(err);
     conn.query(
       `SELECT * FROM ProvFavorito pf WHERE IdProvFavorito = COALESCE(${id}, pf.IdProvFavorito)
-      AND IdComprador = COALESCE(${idComprador}, pf.IdComprador)
-      AND IdProveedor = COALESCE(${idProveedor}, pf.IdProveedor)`, 
+      AND IdUsuarioComp = COALESCE(${idComprador}, pf.IdUsuarioComp)
+      AND IdUsuarioProv = COALESCE(${idProveedor}, pf.IdUsuarioProv)`, 
       (err, rows) => {
         if(err) res.json(err);
         res.json({rows});

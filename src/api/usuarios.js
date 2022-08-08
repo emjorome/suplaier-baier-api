@@ -8,7 +8,9 @@ router.get('/', function(req, res, next) {
     req.getConnection((err, conn) =>{
       if(err) return res.send(err);
       conn.query(
-        `SELECT * FROM Usuario u WHERE IdUsuario = COALESCE(${id}, u.IdUsuario) AND Nombre = COALESCE(${nombre}, u.Nombre)`, 
+        `SELECT * FROM Usuario u 
+        WHERE IdUsuario = COALESCE(${id}, u.IdUsuario) 
+        AND Nombre = COALESCE(${nombre}, u.Nombre)`, 
         (err, rows) => {
           if(err) res.json(err);
           res.json({rows});
@@ -21,17 +23,17 @@ router.post('/', function(req, res){
     let query = `INSERT INTO Comprador VALUES ${req.body}`;
 });
   
-router.post('/auth', (req, res) => {
-    const {usuario, pass} = req.body;
-    req.getConnection((err, conn) =>{
-        if(err) return res.send(err);
-        conn.query(
-          `CALL Autenticacion ("${usuario}","${pass}")`, 
-          (err, rows) => {
-            if(err) console.log(err);
-            res.json(rows[0]);
-        });
-      });
-});
+// router.post('/auth', (req, res) => {
+//     const {usuario, pass} = req.body;
+//     req.getConnection((err, conn) =>{
+//         if(err) return res.send(err);
+//         conn.query(
+//           `CALL Autenticacion ("${usuario}","${pass}")`, 
+//           (err, rows) => {
+//             if(err) console.log(err);
+//             res.json(rows[0]);
+//         });
+//       });
+// });
 
 module.exports = router;
