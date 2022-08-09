@@ -13,6 +13,7 @@ const pubByCategoria = require('./pubByCategoria');
 const usuarios = require('./usuarios');
 const autenticacion = require('./auth');
 const ofertaByProducto = require('./ofertaByProducto');
+const validarUsuario = require('./validarUsername');
 
 const router = express.Router();
 
@@ -35,5 +36,6 @@ router.use('/pubByCategoria', pubByCategoria);
 router.use('/usuarios', usuarios);
 router.use('/auth', autenticacion);
 router.use('/ofertabyproducto', ofertaByProducto);
+router.use('/validarusuario', validarUsuario);
 
 module.exports = router;
