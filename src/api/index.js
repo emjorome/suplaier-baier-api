@@ -14,6 +14,7 @@ const usuarios = require('./usuarios');
 const autenticacion = require('./auth');
 const ofertaByProducto = require('./ofertaByProducto');
 const validarUsuario = require('./validarUsername');
+const obtenerAhora = require('./getTimeNow');
 
 const router = express.Router();
 
@@ -37,5 +38,6 @@ router.use('/usuarios', usuarios);
 router.use('/auth', autenticacion);
 router.use('/ofertabyproducto', ofertaByProducto);
 router.use('/validarusuario', validarUsuario);
+router.use('/obtenerahora', obtenerAhora);
 
 module.exports = router;

@@ -11,13 +11,15 @@ router.get('/', function(req, res, next) {
       FROM Oferta ofe
       JOIN Producto pr
       WHERE ofe.IdProducto = pr.IdProducto
-      AND ofe.IdProveedor = ${idProveedor}
-      AND pr.Name LIKE "%{${q}}"`, 
+      AND ofe.IdProveedor = COALESCE(${idProveedor}, ofe.IdProveedor)
+      AND pr.Name LIKE "%${q}%"`, 
       (err, rows) => {
         if(err) res.json(err);
         res.json({rows});
     });
   });
 });
+
+//%${q}%
 
 module.exports = router;

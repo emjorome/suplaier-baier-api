@@ -24,12 +24,12 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/',function(req, res){
-    const { Name, Descripcion, Stock, ValorU, Activo, FechaCreacion, FechaModificacion, Valoracion, IdProveedor, IdCatProducto, UrlImg} = req.body;
+    const { Name, Descripcion, Activo, Valoracion, IdProveedor, IdCatProducto, UrlImg} = req.body;
     req.getConnection((err, conn) =>{
       if (err) return res.send(err);
       conn.query(
-        `INSERT INTO Producto (Descripcion, Stock, ValorU, Activo, FechaCreacion, FechaModificacion, Valoracion, Name, IdCatProducto, IdProveedor, UrlImg) VALUES 
-        ('${Descripcion}', ${Stock}, ${ValorU}, ${Activo}, '${FechaCreacion}', '${FechaModificacion}', ${Valoracion}, '${Name}', ${IdCatProducto}, ${IdProveedor}, '${UrlImg}')`,
+        `INSERT INTO Producto (Descripcion, Activo, FechaCreacion, FechaModificacion, Valoracion, Name, IdCatProducto, IdProveedor, UrlImg) VALUES 
+        ('${Descripcion}', ${Activo}, NOW(), NOW(), ${Valoracion}, '${Name}', ${IdCatProducto}, ${IdProveedor}, '${UrlImg}')`,
         (err, rows) => {
           if(err) res.json(err);
           res.json("Producto creado exitosamente");
