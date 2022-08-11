@@ -19,19 +19,37 @@ router.get('/', function(req, res, next) {
   });
 });
 
+//IdOferta, IdProducto, IdProveedor, IdEstadosOferta, Minimo, Maximo, Descripcion, ActualProductos, FechaLimite, FechaCreacion, FechaModificacion, Estado, ValorUProducto
 
 router.post('/', (req, res, next) =>{
-  const {IdProducto, Minimo, Maximo, Descripcion, ActualProductos, FechaLimite, Estado, IdEstadoOferta, IdProveedor} = req.body;
+  const {IdProducto, IdProveedor, IdEstadosOferta, Minimo, Maximo, Descripcion, ActualProductos, FechaLimite, Estado, ValorUProducto} = req.body;
   req.getConnection((err, conn) =>{
     if(err) return res.send(err);
     conn.query(
-      `INSERT INTO Publicacion (IdProducto, Minimo, Maximo, Descripcion, ActualProductos, FechaLimite, FechaCreacion, FechaModificacion, Estado, IdEstadoOferta, IdProveedor) 
-        VALUES (${IdProducto}, ${Minimo}, ${Maximo}, "${Descripcion}", ${ActualProductos}, "${FechaLimite}", NOW(), NOW(), ${Estado}, ${IdEstadoOferta}, ${IdProveedor})`, 
+      `INSERT INTO Oferta (IdProducto, IdProveedor, IdEstadosOferta, Minimo, Maximo, Descripcion, ActualProductos, FechaLimite, FechaCreacion, FechaModificacion, Estado, ValorUProducto) 
+        VALUES (${IdProducto},${IdProveedor},${IdEstadosOferta},${Minimo}, ${Maximo}, "${Descripcion}", ${ActualProductos}, "${FechaLimite}", NOW(), NOW(), ${Estado}, ${ValorUProducto})`, 
       (err, rows) => {
         if(err) console.log(err);
         res.json(rows);
     });
   });
+});
+
+//patch para actualizar el ActualProductos de una oferta
+router.patch('/', (req, res, next) => {
+  const {IdOferta, NuevoActualProductos} = req.body;
+  req.getConnection((err, conn) => {
+    if(err) return res.send(err);
+    conn.query(
+      `UPDATE Oferta ofe
+      SET ofe.ActualProductos = COALESCE(${NuevoActualProductos}, ofe.ActualProductos)
+      WHERE ofe.IdOferta = COALESCE(${IdOferta}, ofe.IdOferta)`,
+      (err, rows) => {
+        if(err) console.log(err);
+        res.json(rows);
+      }
+    )
+  })
 });
 
 // router.post('/join', (req, res, next) => {

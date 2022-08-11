@@ -18,9 +18,19 @@ router.get('/', function(req, res, next) {
     });
   });
   
-router.post('/', function(req, res){
-    const { title, director, year, rating } = req.body;
-    let query = `INSERT INTO Comprador VALUES ${req.body}`;
+  router.post('/',function(req, res){
+    const { IdRol, Nombre, Identificacion, Usuario, Contrasena, Email, Numero, Pais, Ciudad, Direccion } = req.body;
+    req.getConnection((err, conn) =>{
+      if (err) return res.send(err);
+      conn.query(
+        `INSERT INTO Usuario (IdRol, Nombre, Identificacion, Usuario, Contrasena, Email, Numero, Pais, Ciudad, Direccion) VALUES 
+        (${IdRol}, '${Nombre}', '${Identificacion}', '${Usuario}', '${Contrasena}', '${Email}', '${Numero}', '${Pais}', '${Ciudad}', '${Direccion}')`,
+        (err, rows) => {
+          if(err) res.json(err);
+          res.json("Usuario creado exitosamente");
+        }
+      );
+    })
 });
   
 // router.post('/auth', (req, res) => {

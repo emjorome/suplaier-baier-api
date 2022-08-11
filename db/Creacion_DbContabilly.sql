@@ -1,55 +1,22 @@
 CREATE DATABASE IF NOT EXISTS DbContabilly;
 USE DbContabilly;
-CREATE TABLE IF NOT EXISTS Proveedor (
-	IdProveedor INT AUTO_INCREMENT PRIMARY KEY,
-	Nombre VARCHAR(100),
-	Identificacion VARCHAR(13),
-	Usuario VARCHAR(20),
-	Contrasena VARCHAR(50),
-	Email VARCHAR(50),
-	Numero VARCHAR(20),
-	Pais VARCHAR(50),
-	Ciudad VARCHAR(50),
-	Direccion VARCHAR(200)
-);
-                        
-CREATE TABLE IF NOT EXISTS Producto (
-	IdProducto INT AUTO_INCREMENT PRIMARY KEY,
-	Descripcion VARCHAR(100),
-	Stock INT,
-	ValorU FLOAT,
-	ValorCompra FLOAT,
-	ValorVenta FLOAT,
-	Activo BOOL, 
-	FechaCreacion DATETIME,
-	FechaModificacion DATETIME,
-	Valoracion FLOAT
-);
-                        
-CREATE TABLE IF NOT EXISTS Comprador (
-	IdComprador INT AUTO_INCREMENT PRIMARY KEY,
-	Nombre VARCHAR(100),
-	Identifcacion VARCHAR(13),
-	Usuario VARCHAR(20),
-	Contrasena VARCHAR(50),
-	Email VARCHAR(50),
-	Numero VARCHAR(20),
-	Pais VARCHAR(50),
-	Ciudad VARCHAR(50),
-	Direccion VARCHAR(200)
-);
-CREATE TABLE IF NOT EXISTS Oferta( #Oferttaaaaaaaaa!!!!
-	IdOferta INT AUTO_INCREMENT PRIMARY KEY,
-	IdProducto INT ,
-	Minimo INT,
-	Maximo INT,
-	Descripcion VARCHAR(500),
-	ActualProductos INT,
-	FechaLimite DATETIME,
-	FechaCreacion DATETIME,
-	FechaModificacion DATETIME,
-	Estado BOOL,
-	FOREIGN KEY (IdProducto) REFERENCES Producto(IdProducto)
+-- CREATE TABLE IF NOT EXISTS Proveedor (
+-- 	IdProveedor INT AUTO_INCREMENT PRIMARY KEY,
+-- 	Nombre VARCHAR(100),
+-- 	Identificacion VARCHAR(13),
+-- 	Usuario VARCHAR(20),
+-- 	Contrasena VARCHAR(50),
+-- 	Email VARCHAR(50),
+-- 	Numero VARCHAR(20),
+-- 	Pais VARCHAR(50),
+-- 	Ciudad VARCHAR(50),
+-- 	Direccion VARCHAR(200)
+-- );
+
+CREATE TABLE IF NOT EXISTS CatProducto(
+	IdCatProducto INT AUTO_INCREMENT PRIMARY KEY,
+    Nombre VARCHAR(50),
+    GoogleCodeRoundedIcon VARCHAR(20)
 );
 
 CREATE TABLE Rol(
@@ -62,7 +29,7 @@ CREATE TABLE Usuario (
 	IdUsuario INT AUTO_INCREMENT PRIMARY KEY,
     IdRol INT,
 	Nombre VARCHAR(100),
-	Identifcacion VARCHAR(13),
+	Identificacion VARCHAR(13),
 	Usuario VARCHAR(20),
 	Contrasena VARCHAR(50),
 	Email VARCHAR(50),
@@ -72,6 +39,69 @@ CREATE TABLE Usuario (
 	Direccion VARCHAR(200),
     FOREIGN KEY (IdRol) REFERENCES Rol(IdRol)
 );
+
+ALTER TABLE Usuario
+ADD Identificacion VARCHAR(15);
+                        
+CREATE TABLE IF NOT EXISTS Producto (
+	IdProducto INT AUTO_INCREMENT PRIMARY KEY,
+    IdProveedor INT,
+    IdCatProducto INT,
+	Descripcion VARCHAR(100),
+	Activo BOOL, 
+	UrlImg MEDIUMTEXT,
+    Name VARCHAR(100),
+	FechaCreacion DATETIME,
+	FechaModificacion DATETIME,
+	Valoracion FLOAT,
+    FOREIGN KEY (IdProveedor) REFERENCES Usuario(IdUsuario),
+    FOREIGN KEY (IdCatProducto) REFERENCES CatProducto(IdCatProducto)
+);
+
+ALTER TABLE Producto
+ADD Descripcion VARCHAR(500);
+
+                        
+-- CREATE TABLE IF NOT EXISTS Comprador (
+-- 	IdComprador INT AUTO_INCREMENT PRIMARY KEY,
+-- 	Nombre VARCHAR(100),
+-- 	Identifcacion VARCHAR(13),
+-- 	Usuario VARCHAR(20),
+-- 	Contrasena VARCHAR(50),
+-- 	Email VARCHAR(50),
+-- 	Numero VARCHAR(20),
+-- 	Pais VARCHAR(50),
+-- 	Ciudad VARCHAR(50),
+-- 	Direccion VARCHAR(200)
+-- );
+
+CREATE TABLE IF NOT EXISTS EstadosOferta(
+	IdEstadosOferta INT AUTO_INCREMENT PRIMARY KEY,
+    Descripcion Varchar(50),
+    FechaCrea DATETIME,
+    Activo BOOL
+);
+
+CREATE TABLE IF NOT EXISTS Oferta( #Oferttaaaaaaaaa!!!!
+	IdOferta INT AUTO_INCREMENT PRIMARY KEY,
+	IdProducto INT ,
+    IdProveedor INT,
+    IdEstadosOferta INT,
+	Minimo INT,
+	Maximo INT,
+	Descripcion VARCHAR(500),
+	ActualProductos INT,
+	FechaLimite DATETIME,
+	FechaCreacion DATETIME,
+	FechaModificacion DATETIME,
+	Estado BOOL,
+    FOREIGN KEY (IdProveedor) REFERENCES Usuario(IdUsuario),
+	FOREIGN KEY (IdProducto) REFERENCES Producto(IdProducto),
+    FOREIGN KEY (IdEstadosOferta) REFERENCES EstadosOferta(IdEstadosOferta)
+);
+
+ALTER TABLE Oferta
+ADD ValorUProducto FLOAT;
 
 CREATE TABLE IF NOT EXISTS Notificacion (
 	IdNotificacion INT AUTO_INCREMENT PRIMARY KEY,
@@ -83,13 +113,6 @@ CREATE TABLE IF NOT EXISTS Notificacion (
     FOREIGN KEY (IdOferta) REFERENCES Oferta(IdOferta)
 );
 
-CREATE TABLE IF NOT EXISTS EstadosOferta(
-	IdEstadosOferta INT AUTO_INCREMENT PRIMARY KEY,
-    Descripcion Varchar(50),
-    FechaCrea DATETIME,
-    Activo BOOL
-);
-
 CREATE TABLE IF NOT EXISTS OfertaComprador(
 	IdOfertaComprador INT AUTO_INCREMENT PRIMARY KEY,
     IdOferta INT, 
@@ -97,17 +120,17 @@ CREATE TABLE IF NOT EXISTS OfertaComprador(
     Cantidad INT, #Cantidad de productos escogidos por ese comprador al unirse
     Estado INT,
     FOREIGN KEY (IdOferta) REFERENCES Oferta(IdOferta),
-    FOREIGN KEY (IdComprador) REFERENCES Comprador(IdComprador)
+    FOREIGN KEY (IdComprador) REFERENCES Usuario(IdUsuario)
 );
 
 CREATE TABLE IF NOT EXISTS ValoracionProducto(
 	IdValoracionProducto INT AUTO_INCREMENT PRIMARY KEY,
-    IdUsuario INT,
+    IdComprador INT,
     IdProducto INT,
     Comentario VARCHAR(1000),
     Valoracion FLOAT,
     FechaCrea DATETIME,
-    FOREIGN KEY (IdUsuario) REFERENCES Comprador(IdComprador),
+    FOREIGN KEY (IdComprador) REFERENCES Usuario(IdUsuario),
     FOREIGN KEY (IdProducto) REFERENCES Producto (IdProducto)
 );
 
@@ -117,9 +140,10 @@ CREATE TABLE Reportes(
     IdOferta INT,
     Motivo VARCHAR(200),
     FechaCrea DATETIME,
-    FOREIGN KEY (IdUsuario) REFERENCES Comprador(IdComprador),
+    FOREIGN KEY (IdUsuario) REFERENCES Usuario(IdUsuario),
     FOREIGN KEY (IdOferta) REFERENCES Oferta(IdOferta)
 );
+
 
 #Tabla de pagos pendientes
 CREATE TABLE Compra(
@@ -171,21 +195,17 @@ INSERT INTO EstadosOferta(Descripcion, FechaCrea, Activo) VALUES
 ('En curso', NOW(), true);
 
 #ADD IDPROVEEDOR TO OFERTA
-ALTER TABLE Oferta
-ADD IdProveedor INT,
-ADD FOREIGN KEY (IdProveedor) REFERENCES Proveedor(IdProveedor);
+-- ALTER TABLE Oferta
+-- ADD IdProveedor INT,
+-- ADD FOREIGN KEY (IdProveedor) REFERENCES Proveedor(IdProveedor);
+
+
+-- SHOW CREATE TABLE Oferta;
 
 #ADD TIPO DE ESTADO
-ALTER TABLE Oferta
-ADD IdEstadosOferta INT,
-ADD	FOREIGN KEY (IdEstadosOferta) REFERENCES EstadosOferta(IdEstadosOferta);
-
-
-CREATE TABLE CatProducto(
-	IdCatProducto INT AUTO_INCREMENT PRIMARY KEY,
-    Nombre VARCHAR(50),
-    GoogleCodeRoundedIcon VARCHAR(20)
-);
+-- ALTER TABLE Oferta
+-- ADD IdEstadosOferta INT,
+-- ADD	FOREIGN KEY (IdEstadosOferta) REFERENCES EstadosOferta(IdEstadosOferta);
 
 INSERT INTO CatProducto(Nombre, GoogleCodeRoundedIcon) VALUES
 ('Artesanías', 'pan_tool'),
@@ -210,29 +230,6 @@ INSERT INTO ProvFavorito(IdUsuarioComp, IdUsuarioProv) VALUES
 (2,6),
 (2,7); 
 
-#DROP COLUMNS: VALORCOMPRA VALORVENTA FROM PRODUCTO
-ALTER TABLE Producto
-DROP COLUMN ValorCompra,
-DROP COLUMN ValorVenta;
-
-#ADD ID_PROVEEDOR TO PRODUCT
-ALTER TABLE Producto
-ADD IdProveedor INT,
-ADD	FOREIGN KEY (IdProveedor) REFERENCES Proveedor(IdProveedor);
-
-#ADD ID_CATEGORY TO PRODUCT
-ALTER TABLE Producto
-ADD IdCatProducto INT,
-ADD FOREIGN KEY (IdCatProducto) REFERENCES CatProducto(IdCatProducto); 
-
-#ADD BLOB TO PRODUCT
-ALTER TABLE Producto
-ADD UrlImg TEXT;
-
-#ADD NAME TO PRODUCT
-ALTER TABLE Producto
-ADD Name VARCHAR(100);
-
 CREATE TABLE TipoNotificacion(
 	IdTipoNotificacion INT AUTO_INCREMENT PRIMARY KEY,
     Tipo VARCHAR(20),
@@ -243,3 +240,18 @@ CREATE TABLE TipoNotificacion(
 ALTER TABLE Notificacion
 ADD IdTipoNotificacion INT,
 ADD	FOREIGN KEY (IdTipoNotificacion) REFERENCES TipoNotificacion(IdTipoNotificacion);
+<<<<<<< HEAD
+=======
+
+
+CALL GetTimeNow(@ahora);
+SELECT @ahora as ahora;
+
+SELECT getnow();
+
+SELECT * FROM Oferta ofe JOIN Producto pr WHERE ofe.IdProducto = pr.IdProducto AND pr.Name LIKE "%{fin}%"
+
+
+
+                        
+>>>>>>> 08bd7e9020a711c97f0745230ed230d83c58049f
