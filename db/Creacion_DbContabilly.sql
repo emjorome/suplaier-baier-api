@@ -243,4 +243,3 @@ CREATE TABLE TipoNotificacion(
 ALTER TABLE Notificacion
 ADD IdTipoNotificacion INT,
 ADD	FOREIGN KEY (IdTipoNotificacion) REFERENCES TipoNotificacion(IdTipoNotificacion);
-                        

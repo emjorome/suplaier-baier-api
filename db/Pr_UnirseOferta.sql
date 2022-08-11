@@ -9,6 +9,8 @@ BEGIN
 	IF ( totalCantidad <= maximoProductos) THEN
 		INSERT INTO OfertaComprador(IdPublicacion, IdComprador, Cantidad) 
 		VALUES(IdPublicacion, IdUsuario, Cantidad);
+        
+        #Se crea la compra con estados para el proveedor y flujo de oferta
         INSERT INTO Compra(IdProveedor, IdComprador, IdOferta, Cantidad, Fecha, PagadoAProveedor)
         VALUES(1, 1, 1, Cantidad,NOW(), False);
 		IF (totalCantidad < maximoProductos) THEN
