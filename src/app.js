@@ -5,7 +5,6 @@ const helmet = require('helmet');
 const cors = require('cors');
 const mysql = require('mysql2');
 const myconn = require('express-myconnection');
-
 require('dotenv').config();
 const dbOptions = {
   host: 'localhost',
@@ -25,7 +24,6 @@ app.use(helmet());
 app.use(cors());
 app.use(express.json());
 app.use(myconn(mysql, dbOptions, 'single'));
-
 
 
 app.get('/', (req, res) => {

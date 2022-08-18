@@ -240,9 +240,6 @@ CREATE TABLE TipoNotificacion(
 ALTER TABLE Notificacion
 ADD IdTipoNotificacion INT,
 ADD	FOREIGN KEY (IdTipoNotificacion) REFERENCES TipoNotificacion(IdTipoNotificacion);
-<<<<<<< HEAD
-=======
-
 
 CALL GetTimeNow(@ahora);
 SELECT @ahora as ahora;
@@ -253,5 +250,3 @@ SELECT * FROM Oferta ofe JOIN Producto pr WHERE ofe.IdProducto = pr.IdProducto A
 
 
 
-                        
->>>>>>> 08bd7e9020a711c97f0745230ed230d83c58049f

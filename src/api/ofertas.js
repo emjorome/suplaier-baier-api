@@ -1,6 +1,6 @@
 var express = require('express');
+var firebase = require('../firebase')
 var router = express.Router();
-
 /* GET ofertas listing. */
 router.get('/', function(req, res, next) {
   const id = req.query.id === undefined ? null : req.query.id;
@@ -46,6 +46,19 @@ router.patch('/', (req, res, next) => {
       WHERE ofe.IdOferta = COALESCE(${IdOferta}, ofe.IdOferta)`,
       (err, rows) => {
         if(err) console.log(err);
+        /*const mensaje = {
+          data: {message:"update"},
+          topic: "contabilly",
+        };
+        getMessaging()
+        .send(mensaje)
+        .then((response) => {
+          // Response is a message ID string.
+          console.log("Successfully sent message:", response);
+        })
+        .catch((error) => {
+          console.log("Error sending message:", error);
+        });*/
         res.json(rows);
       }
     )
