@@ -246,7 +246,17 @@ SELECT @ahora as ahora;
 
 SELECT getnow();
 
-SELECT * FROM Oferta ofe JOIN Producto pr WHERE ofe.IdProducto = pr.IdProducto AND pr.Name LIKE "%{fin}%"
+SELECT * FROM Oferta ofe JOIN Producto pr WHERE ofe.IdProducto = pr.IdProducto AND pr.Name LIKE "%fin%";
+
+INSERT INTO EstadosOferta(Descripcion, FechaCrea, Activo) VALUES 
+("Por confirmar cierre",NOW(),1),
+("Verificando pagos",NOW(),1),
+("Por despachar",NOW(),1),
+("Despachado",NOW(),1),
+("En revisión",NOW(),1),
+("Por devolver pago",NOW(),1),
+("Pago devuelto",NOW(),1),
+("Finalizado",NOW(),1);
 
 
 

@@ -38,6 +38,23 @@ router.post('/',function(req, res){
     })
 });
 
+router.patch('/', (req, res, next) => {
+  const {idProducto, ValoracionNueva} = req.body;
+  console.log(req.body)
+  req.getConnection((err, conn) => {
+    if(err) return res.send(err);
+    conn.query(
+      `UPDATE Producto prod
+        SET prod.Valoracion = COALESCE(${ValoracionNueva}, prod.Valoracion)
+        WHERE prod.IdProducto = COALESCE(${idProducto}, prod.IdProducto)`,
+      (err, rows) => {
+        if(err) console.log(err);
+        res.json(rows);
+      }
+    )
+  })
+});
+
 router.put('/:id', function(req, res){
     const { id } = req.params;
     const { nombre, precio } = req.body;
