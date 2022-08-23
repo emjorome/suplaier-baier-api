@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-
+var mailer = require('../mailer');
 /* GET ofertas listing. */
 router.get('/', function(req, res, next) {
   const id = req.query.id === undefined ? null : req.query.id;
@@ -14,6 +14,8 @@ router.get('/', function(req, res, next) {
       AND IdEstadosOferta = COALESCE(${idEstadosOferta}, Oferta.IdEstadosOferta)`, 
       (err, rows) => {
         if(err) res.json(err);
+        console.log(rows);
+        mailer.enviarCorreo('joseleonardoc98@hotmail.com', 'tema de prueba', rows[0].Estado.toString());
         res.json({rows});
     });
   });
