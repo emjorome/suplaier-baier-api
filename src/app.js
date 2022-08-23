@@ -16,7 +16,8 @@ const dbOptions = {
 
 const middlewares = require('./middlewares');
 const api = require('./api');
-
+const mailer = require('./mailer');
+const firebaseMessagging = require('./firebaseMesagging');
 const app = express();
 
 app.use(morgan('dev'));
@@ -36,5 +37,6 @@ app.use('/api/v1', api);
 
 app.use(middlewares.notFound);
 app.use(middlewares.errorHandler);
-
+app.use(mailer.enviarCorreo);
+app.use(firebaseMessagging.enviarNotificacion);
 module.exports = app;
