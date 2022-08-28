@@ -13,9 +13,11 @@ const pubByCategoria = require('./pubByCategoria');
 const usuarios = require('./usuarios');
 const autenticacion = require('./auth');
 const ofertaByProducto = require('./ofertaByProducto');
+const ofertaByProductoLike = require('./ofertaByProductoLike');
 const validarUsuario = require('./validarUsername');
 const obtenerAhora = require('./getTimeNow');
 const cambiarOfertaEstado = require('./cambiarOfertaEstado');
+const reportes = require('./reportes');
 
 const router = express.Router();
 
@@ -41,5 +43,7 @@ router.use('/ofertabyproducto', ofertaByProducto);
 router.use('/validarusuario', validarUsuario);
 router.use('/obtenerahora', obtenerAhora);
 router.use('/cambiarofertaestado', cambiarOfertaEstado);
+router.use('/ofertabyproductolike', ofertaByProductoLike);
+router.use('/reportes', reportes);
 
 module.exports = router;
