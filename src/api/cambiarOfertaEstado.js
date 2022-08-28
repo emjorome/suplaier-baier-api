@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-
+var mailer = require('../mailer');
 //patch para actualizar el ActualProductos de una oferta
 router.patch('/', (req, res, next) => {
   const {IdOferta, IdEstadosOferta} = req.body;
@@ -13,6 +13,7 @@ router.patch('/', (req, res, next) => {
         WHERE ofe.IdOferta = COALESCE(${IdOferta}, ofe.IdOferta)`,
       (err, rows) => {
         if(err) console.log(err);
+        mailer.enviarCorreo();
         res.json(rows);
       }
     )

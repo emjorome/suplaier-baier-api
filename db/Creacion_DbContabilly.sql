@@ -241,7 +241,6 @@ ALTER TABLE Notificacion
 ADD IdTipoNotificacion INT,
 ADD	FOREIGN KEY (IdTipoNotificacion) REFERENCES TipoNotificacion(IdTipoNotificacion);
 
-
 CALL GetTimeNow(@ahora);
 SELECT @ahora as ahora;
 
@@ -279,4 +278,3 @@ SET ofe.IdEstadosOferta = 10
 WHERE ofe.IdOferta = COALESCE(1, ofe.IdOferta)
 AND ofe.IdOferta > 0;
 
-                        

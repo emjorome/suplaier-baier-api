@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "contabillyapp",
+  "private_key_id": "416070b37973121312f7d8124362115a2aeb30d4",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCULxHhEWjY5A6d\nj4JWba82FGlNSEh9SPip6LaMT/f8ToJ4QIs0saRloD5K9FuYmYCgKdQ/BJFeiRFV\nR5e7mfV/rNttTohFIjUDSqeh9ew6JP0f8zJhSv+XXw88Qzq+rFUyTz/C/8/6tSnP\nIUeSReUGP+q7TE2zfj8WZNyWDwBB7SYaQCLWg5u9QT4knM2VdAvcVnU8AiD8pSWd\nR79RhPf7q9eOGwyjg6L8J8YW0Y0QNQjk6ojdOCk9r9dtT2P8mAo605yF+sYo3afw\n6bSQNmD66C8kXuv/aSKvOyHvErf1VnTVIZQhUKnGM42pgxKy1kWYYmw5Bgnw6JoH\nrMDDEckzAgMBAAECggEAGiequLaZcnriZ4YOg9HNVLbKlVT2UoLAPUExg1eUFkkH\nN1FxIKZgNX3QsOsrhaZGcT6g01SrkeuQjyRZUEgO8G+itUrgu48bm06ggvJEtUiV\nEwAaetjBf0bMih71rfT9/qjFQNZlL8OtMv2VQ+ipUW6TsGZ56n4UhY/c7XGNYpVD\nwSd8hkkXl+xfNdg00qDR4jKJZ/lkk4NbfR76lY7OalWQQk+dMl3kXA6rOnO1tYrQ\n0m2rsKpz4sSSTOAeyE1MPz4d/7yo5md7uhbSCfXGP/Jl0iZAe6QiQ++dzTITc7pJ\nBSpKp/ahZ67leuu6IUyUh/ovgKZ764aos5o1hHfzyQKBgQDN6dq473TacZuulJVN\nir4UfPwhBbGewfZqh3cL7S1xfnD/EZJPGdoB5pzYe4VlIhd38iXGmb4q+qJST2WG\nzw9CpZQxV6ZnVDAIlqQyhgJTCAcadzybGe8vVA2PszdRQp4O2jw/LhRcfAZIFueM\n94jzMxYLRSRPRa8onkFHxNdHawKBgQC4OmqIdZyYWlTVylt48QN60ak8ESk5oXL8\n+wxtfZAD5vuxX2x08taM0wnaoGwTirxet3gEX1YVpkRTaW/uDfDIdM6F85zS/qyf\nqS2uX4APBGdX65MxLIwiHgs3/OWqqquiZhG4LgUniddKEb7PIODn7vK82BXmwOZh\nZO3gcLwfWQKBgG83ILiENQQLGn/3ppBkIHgmbXNUhPPvZS1yjzz01HeZSGSr0+8/\nUj12lj5isNDH0g8pzXdv8IN8LZHxai+exGpFzj28Tpc+pFbvLi5PrQ+1pUiJIEXR\ngxt39X8o1/be2UnCW4nwVHUDU805+cRsqh5Y+E4MASmDxLBWkYG28mOTAoGBAImb\nWKfE8cr67hMiq2CS5b5/jKFJUDmz1mgQPSArgb7ocWfzltdj684UdG/RE+kk377/\n262oaGyTXMXRI8H0t72DQh/b72/KurYnb++ndcfByk9prvA0DhgNyONxCzuHb9xF\n0UZ5WXBHDYBN8PBV5qhXWwijfvh1bZ+h++yBSINBAoGALFrMGSEQmn6Tn6hNy3fQ\n9vMnMH2Q6LWpfHI8TGPgH/IKpowhg31WiBQi6yASL5mfwC6X6fj2/DRKEvj5z5Dg\nJnsFdsOH0OUTr7xIbP+stiaPRHG/8c5Jedkjcu/gVFs7U8H9ZYhSBMQEZOSl3XoV\nid0bvqpqo+f5wyL9V5kTdl8=\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-prah9@contabillyapp.iam.gserviceaccount.com",
+  "client_id": "100146621983387866492",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-prah9%40contabillyapp.iam.gserviceaccount.com"
+}

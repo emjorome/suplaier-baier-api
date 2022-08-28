@@ -1,6 +1,7 @@
 var express = require('express');
+var firebase = require('../firebase')
 var router = express.Router();
-
+var mailer = require('../mailer');
 /* GET ofertas listing. */
 router.get('/', function(req, res, next) {
   const id = req.query.id === undefined ? null : req.query.id;
@@ -14,6 +15,8 @@ router.get('/', function(req, res, next) {
       AND IdEstadosOferta = COALESCE(${idEstadosOferta}, Oferta.IdEstadosOferta)`, 
       (err, rows) => {
         if(err) res.json(err);
+        console.log(rows);
+        mailer.enviarCorreo('joseleonardoc98@hotmail.com', 'tema de prueba', rows[0].Estado.toString());
         res.json({rows});
     });
   });
@@ -46,6 +49,19 @@ router.patch('/', (req, res, next) => {
       WHERE ofe.IdOferta = COALESCE(${IdOferta}, ofe.IdOferta)`,
       (err, rows) => {
         if(err) console.log(err);
+        /*const mensaje = {
+          data: {message:"update"},
+          topic: "contabilly",
+        };
+        getMessaging()
+        .send(mensaje)
+        .then((response) => {
+          // Response is a message ID string.
+          console.log("Successfully sent message:", response);
+        })
+        .catch((error) => {
+          console.log("Error sending message:", error);
+        });*/
         res.json(rows);
       }
     )
