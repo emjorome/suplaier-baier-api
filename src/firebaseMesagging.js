@@ -40,7 +40,7 @@ function enviarNotificacionTopic(notificationData) {
   };
 
   // Send a message to devices subscribed to the provided topic.
-  getMessaging()
+  admin.messaging()
     .send(message)
     .then((response) => {
       // Response is a message ID string.

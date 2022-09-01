@@ -1,5 +1,4 @@
 var express = require('express');
-var firebase = require('../firebase')
 var router = express.Router();
 var mailer = require('../mailer');
 /* GET ofertas listing. */
