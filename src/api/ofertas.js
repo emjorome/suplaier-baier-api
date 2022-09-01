@@ -1,4 +1,6 @@
 var express = require('express');
+var firebase = require('../firebase');
+const { enviarNotificacionTopic } = require('../firebaseMesagging');
 var router = express.Router();
 var mailer = require('../mailer');
 /* GET ofertas listing. */
@@ -14,8 +16,10 @@ router.get('/', function(req, res, next) {
       AND IdEstadosOferta = COALESCE(${idEstadosOferta}, Oferta.IdEstadosOferta)`, 
       (err, rows) => {
         if(err) res.json(err);
-        console.log(rows);
-        mailer.enviarCorreo('joseleonardoc98@hotmail.com', 'tema de prueba', rows[0].Estado.toString());
+        // if(rows.length === 1){
+        //   //mailer.enviarCorreo('kaduran1998@gmail.com', 'tema de prueba', rows[0].Estado.toString());
+        //   //enviarNotificacionTopic({title: "Oferta ha cambiado", message: "Prueba", topic: "cambio-estado"})
+        // }
         res.json({rows});
     });
   });
@@ -48,7 +52,6 @@ router.patch('/', (req, res, next) => {
       WHERE ofe.IdOferta = COALESCE(${IdOferta}, ofe.IdOferta)`,
       (err, rows) => {
         if(err) console.log(err);
-        
         res.json(rows);
       }
     )

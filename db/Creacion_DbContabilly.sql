@@ -259,6 +259,39 @@ INSERT INTO EstadosOferta(Descripcion, FechaCrea, Activo) VALUES
 ("Pago devuelto",NOW(),1),
 ("Finalizado",NOW(),1);
 
+INSERT INTO EstadosOferta(Descripcion, FechaCrea, Activo) VALUES 
+("Cerrado",NOW(),1);
+
+INSERT INTO EstadosOferta(Descripcion, FechaCrea, Activo) VALUES 
+("Pendiente",NOW(),1);
+
+-- SET foreign_key_checks = 0;
+-- UPDATE Oferta ofe
+-- JOIN EstadosOferta est ON ofe.IdEstadosOferta = est.IdEstadosOferta
+-- SET ofe.IdEstadosOferta = est.IdEstadosOferta
+-- WHERE ofe.IdOferta = COALESCE(1, ofe.IdOferta)
+-- AND ofe.IdOferta > 0
+-- AND est.Descripcion = "Cerrado";
+-- SET foreign_key_checks = 1;
+
+UPDATE Oferta ofe
+SET ofe.IdEstadosOferta = 10
+WHERE ofe.IdOferta = COALESCE(1, ofe.IdOferta)
+AND ofe.IdOferta > 0;
+
+
+ALTER TABLE Reportes 
+ADD COLUMN Descripcion VARCHAR(500),
+ADD COLUMN IdCompra INT,
+ADD FOREIGN KEY (IdCompra) REFERENCES Compra(IdCompra);
+
+CREATE TABLE Foto(
+	IdFoto INT AUTO_INCREMENT PRIMARY KEY,
+	UrlImg MEDIUMTEXT,
+    AltName VARCHAR(50),
+    IdProducto INT,
+    FOREIGN KEY (IdProducto) REFERENCES Producto(IdProducto)
+);
 
 
                         

@@ -1,13 +1,15 @@
 var admin = require("firebase-admin");
+var getMessaging = require("firebase/messaging");
 
-var serviceAccount = require("../contabillyapp-key.json");
-function initApp(){
-    admin.initializeApp({
-        credential: admin.credential.cert(serviceAccount),
-      });
-}
+//var serviceAccount = require("../contabillyapp-key.json");
 
-initApp();
+// function initApp(){
+//     admin.initializeApp({
+//         credential: admin.credential.cert(serviceAccount),
+//       });
+// }
+
+// initApp();
 
 const topic = "Contabilly";
 
@@ -20,17 +22,19 @@ const message = {
 };
 
 // Send a message to devices subscribed to the provided topic.
-admin.messaging()
-  .send(message)
-  .then((response) => {
-    // Response is a message ID string.
-    console.log("Successfully sent message:", response);
-  })
-  .catch((error) => {
-    console.log("Error sending message:", error);
-  });
+// admin.messaging()
+//   .send(message)
+//   .then((response) => {
+//     // Response is a message ID string.
+//     console.log("Successfully sent message:", response);
+//   })
+//   .catch((error) => {
+//     console.log("Error sending message:", error);
+//   });
 
 function enviarNotificacionTopic(notificationData) {
+  console.log("que pedo mi perro")
+  
   const message = {
     data: {
       title: notificationData.title,

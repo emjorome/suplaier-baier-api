@@ -16,7 +16,7 @@ router.get('/', function(req, res, next) {
       AND c.IdProveedor = COALESCE(${idProveedor}, c.IdProveedor)
       AND c.IdComprador = COALESCE(${idComprador}, c.IdComprador)
       AND c.IdOferta = COALESCE(${idOferta}, c.IdOferta)
-      AND c.IdEstado >= COALESCE(${idEstado}, c.IdEstado)`, 
+      AND c.IdEstado = COALESCE(${idEstado}, c.IdEstado)`, 
       (err, rows) => {
         if(err) res.json(err);
         res.json({rows});

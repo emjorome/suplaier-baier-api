@@ -5,7 +5,6 @@ const helmet = require('helmet');
 const cors = require('cors');
 const mysql = require('mysql2');
 const myconn = require('express-myconnection');
-
 require('dotenv').config();
 const dbOptions = {
   host: 'localhost',
@@ -28,7 +27,6 @@ app.use(express.json());
 app.use(myconn(mysql, dbOptions, 'single'));
 
 
-
 app.get('/', (req, res) => {
   res.json({
     message: '🦄🌈✨👋🌎🌍🌏✨🌈🦄'
@@ -39,6 +37,6 @@ app.use('/api/v1', api);
 
 app.use(middlewares.notFound);
 app.use(middlewares.errorHandler);
-app.use(mailer.enviarCorreo);
-app.use(firebaseMessagging.enviarNotificacion);
+//app.use(mailer.enviarCorreo);
+//app.use(firebaseMessagging.enviarNotificacionTopic);
 module.exports = app;
