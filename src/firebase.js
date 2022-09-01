@@ -17,25 +17,25 @@ const message = {
   topic: topic,
 };
 
-const sendNotification = (message, topic) => {
-    /*const message = {
-        data: message,
-        topic: topic,
-      };*/
+// const sendNotification = (message, topic) => {
+//     /*const message = {
+//         data: message,
+//         topic: topic,
+//       };*/
     
-      // Send a message to devices subscribed to the provided topic.
-      getMessaging()
-        .send(message)
-        .then((response) => {
-          // Response is a message ID string.
-          console.log("Successfully sent message:", response);
-        })
-        .catch((error) => {
-          console.log("Error sending message:", error);
-        });
-};
+//       // Send a message to devices subscribed to the provided topic.
+//       getMessaging()
+//         .send(message)
+//         .then((response) => {
+//           // Response is a message ID string.
+//           console.log("Successfully sent message:", response);
+//         })
+//         .catch((error) => {
+//           console.log("Error sending message:", error);
+//         });
+// };
 
 module.exports = {
     admin,
-    sendNotification
+    // sendNotification
 };

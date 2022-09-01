@@ -37,6 +37,6 @@ app.use('/api/v1', api);
 
 app.use(middlewares.notFound);
 app.use(middlewares.errorHandler);
-app.use(mailer.enviarCorreo);
-app.use(firebaseMessagging.enviarNotificacion);
+//app.use(mailer.enviarCorreo);
+//app.use(firebaseMessagging.enviarNotificacionTopic);
 module.exports = app;

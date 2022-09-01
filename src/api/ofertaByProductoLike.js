@@ -3,6 +3,7 @@ var router = express.Router();
 
 router.get('/', function(req, res, next) {
   const nombreProducto = req.query.nombreProducto === undefined ? null : req.query.nombreProducto;
+  console.log(nombreProducto)
   const idProveedor = req.query.idProveedor === undefined ? null : req.query.idProveedor;
   req.getConnection((err, conn) =>{
     if(err) return res.send(err);
