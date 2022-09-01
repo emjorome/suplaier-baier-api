@@ -48,6 +48,7 @@ router.patch('/', (req, res, next) => {
       WHERE ofe.IdOferta = COALESCE(${IdOferta}, ofe.IdOferta)`,
       (err, rows) => {
         if(err) console.log(err);
+        
         res.json(rows);
       }
     )

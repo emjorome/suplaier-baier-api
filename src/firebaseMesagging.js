@@ -13,10 +13,10 @@ const topic = "Contabilly";
 
 const message = {
   data: {
-    score: "850",
-    time: "2:45",
+      title: "TITULO DEL MENSAJE DE PRUEBA",
+      message: "Estoy enviando una notificacion de prueba desde el back end",
   },
-  topic: topic,
+  token: "MI_TOKEN",
 };
 
 // Send a message to devices subscribed to the provided topic.
