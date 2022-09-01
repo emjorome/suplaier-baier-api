@@ -23,6 +23,10 @@ router.get('/', function(req, res, next) {
   });
 });
 
+
+// joseking5@hotmail.com
+// Leonardo01!
+
 router.post('/',function(req, res){
     const { Name, Descripcion, Activo, Valoracion, IdProveedor, IdCatProducto, UrlImg} = req.body;
     req.getConnection((err, conn) =>{

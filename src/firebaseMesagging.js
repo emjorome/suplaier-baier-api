@@ -1,36 +1,40 @@
 var admin = require("firebase-admin");
+var getMessaging = require("firebase/messaging");
 
 var serviceAccount = require("../contabillyapp-key.json");
-function initApp(){
-    admin.initializeApp({
-        credential: admin.credential.cert(serviceAccount),
-      });
-}
 
-initApp();
+ function initApp(){
+     admin.initializeApp({
+         credential: admin.credential.cert(serviceAccount),
+       });
+ }
+
+ initApp();
 
 const topic = "Contabilly";
 
 const message = {
   data: {
-    score: "850",
-    time: "2:45",
+      title: "TITULO DEL MENSAJE DE PRUEBA",
+      message: "Estoy enviando una notificacion de prueba desde el back end",
   },
-  topic: topic,
+  topic: "MI_TOKEN",
 };
 
 // Send a message to devices subscribed to the provided topic.
 admin.messaging()
-  .send(message)
-  .then((response) => {
-    // Response is a message ID string.
-    console.log("Successfully sent message:", response);
-  })
-  .catch((error) => {
-    console.log("Error sending message:", error);
-  });
+   .send(message)
+   .then((response) => {
+     // Response is a message ID string.
+     console.log("Successfully sent message:", response);
+   })
+   .catch((error) => {
+     console.log("Error sending message:", error);
+   });
 
 function enviarNotificacionTopic(notificationData) {
+  console.log("que pedo mi perro")
+  
   const message = {
     data: {
       title: notificationData.title,
