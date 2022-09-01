@@ -1,5 +1,4 @@
 var express = require('express');
-var firebase = require('../firebase');
 const { enviarNotificacionTopic } = require('../firebaseMesagging');
 var router = express.Router();
 var mailer = require('../mailer');
