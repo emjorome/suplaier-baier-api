@@ -42,6 +42,19 @@ CREATE TABLE Usuario (
 
 ALTER TABLE Usuario
 ADD Identificacion VARCHAR(15);
+
+ALTER TABLE Usuario
+ADD Ruc VARCHAR(15);
+
+ALTER TABLE Usuario
+ADD FirebaseToken VARCHAR(200);
+
+
+-- ALTER TABLE Usuario
+-- DROP COLUMN FirebaseToken;
+
+ALTER TABLE Usuario
+ADD UrlLogoEmpresa MEDIUMTEXT;
                         
 CREATE TABLE IF NOT EXISTS Producto (
 	IdProducto INT AUTO_INCREMENT PRIMARY KEY,
@@ -107,11 +120,15 @@ CREATE TABLE IF NOT EXISTS Notificacion (
 	IdNotificacion INT AUTO_INCREMENT PRIMARY KEY,
 	IdUsuario INT,
     IdOferta INT,
+    IdCompra INT,
     Descripcion VARCHAR(200),
     FechaCrea DATETIME,
     FOREIGN KEY (IdUsuario) REFERENCES Usuario(IdUsuario),
-    FOREIGN KEY (IdOferta) REFERENCES Oferta(IdOferta)
+    FOREIGN KEY (IdOferta) REFERENCES Oferta(IdOferta),
+    FOREIGN KEY (IdCompra) REFERENCES Compra(IdCompra)
 );
+
+
 
 CREATE TABLE IF NOT EXISTS OfertaComprador(
 	IdOfertaComprador INT AUTO_INCREMENT PRIMARY KEY,

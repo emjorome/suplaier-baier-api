@@ -18,6 +18,7 @@ const validarUsuario = require('./validarUsername');
 const obtenerAhora = require('./getTimeNow');
 const cambiarOfertaEstado = require('./cambiarOfertaEstado');
 const reportes = require('./reportes');
+const enviarNotificacionCompra = require('./enviarNotificacionCompra');
 
 const router = express.Router();
 
@@ -45,5 +46,6 @@ router.use('/obtenerahora', obtenerAhora);
 router.use('/cambiarofertaestado', cambiarOfertaEstado);
 router.use('/ofertabyproductolike', ofertaByProductoLike);
 router.use('/reportes', reportes);
+router.use('/enviarNotificacionCompra', enviarNotificacionCompra);
 
 module.exports = router;

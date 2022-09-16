@@ -15,10 +15,13 @@ router.get('/', function(req, res, next) {
       AND IdEstadosOferta = COALESCE(${idEstadosOferta}, Oferta.IdEstadosOferta)`, 
       (err, rows) => {
         if(err) res.json(err);
-        // if(rows.length === 1){
-        //   //mailer.enviarCorreo('kaduran1998@gmail.com', 'tema de prueba', rows[0].Estado.toString());
-        //   //enviarNotificacionTopic({title: "Oferta ha cambiado", message: "Prueba", topic: "cambio-estado"})
-        // }
+        //mailer.enviarCorreo('kaduran1998@gmail.com', 'tema de prueba', rows[0].Estado.toString());
+        // enviarNotificacionTopic({
+        //   title: "Oferta ha cambiado", 
+        //   message: "Prueba", 
+        //   token: "cihtSbtdqjnCsteQQZ10bW:APA91bFvDHZI1y5KR48Lus-zOn-SmAf_P2Plq49jtxxhsu60sQUJiaLm0I7PzPDKAdf43RWbsErONjwm7CJN5Gl6ZgZMJggJpJjXM62Mfoa7FRC_sbpT07JBLM0T_8mquEBWFdiiE-d9"
+        // })
+  
         res.json({rows});
     });
   });
