@@ -52,15 +52,15 @@ function enviarNotificacionTopic(notificationData) {
    });
 
   // Send a message to devices subscribed to the provided topic.
-  // getMessaging()
-  //   .send(message)
-  //   .then((response) => {
-  //     // Response is a message ID string.
-  //     console.log("Successfully sent message:", response);
-  //   })
-  //   .catch((error) => {
-  //     console.log("Error sending message:", error);
-  //   });
+  admin.messaging()
+    .send(message)
+    .then((response) => {
+      // Response is a message ID string.
+      console.log("Successfully sent message:", response);
+    })
+    .catch((error) => {
+      console.log("Error sending message:", error);
+    });
 }
 
 module.exports = { enviarNotificacionTopic };
