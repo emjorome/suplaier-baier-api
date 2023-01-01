@@ -9,8 +9,8 @@ require('dotenv').config();
 const dbOptions = {
   host: 'localhost',
   port: '3306',
-  user: 'root',
-  password: 'root',
+  user: 'suplaierAdmin',
+  password: 'ingsoftw1',
   database: 'DbContabilly',
 };
 
