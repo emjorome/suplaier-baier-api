@@ -1,4 +1,4 @@
--- USE DbContabilly;
+USE DbContabilly;
 -- DELIMITER $$
 -- CREATE PROCEDURE GetTimeNow(OUT ahora DATETIME)
 -- BEGIN

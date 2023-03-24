@@ -29,7 +29,7 @@ CREATE TABLE Usuario (
 	IdUsuario INT AUTO_INCREMENT PRIMARY KEY,
     IdRol INT,
 	Nombre VARCHAR(100),
-	Identificacion VARCHAR(13),
+	Identificacion VARCHAR(15),
 	Usuario VARCHAR(20),
 	Contrasena VARCHAR(50),
 	Email VARCHAR(50),
@@ -39,9 +39,6 @@ CREATE TABLE Usuario (
 	Direccion VARCHAR(200),
     FOREIGN KEY (IdRol) REFERENCES Rol(IdRol)
 );
-
-ALTER TABLE Usuario
-ADD Identificacion VARCHAR(15);
 
 ALTER TABLE Usuario
 ADD Ruc VARCHAR(15);
@@ -60,7 +57,7 @@ CREATE TABLE IF NOT EXISTS Producto (
 	IdProducto INT AUTO_INCREMENT PRIMARY KEY,
     IdProveedor INT,
     IdCatProducto INT,
-	Descripcion VARCHAR(100),
+	Descripcion VARCHAR(500),
 	Activo BOOL, 
 	UrlImg MEDIUMTEXT,
     Name VARCHAR(100),
@@ -70,10 +67,6 @@ CREATE TABLE IF NOT EXISTS Producto (
     FOREIGN KEY (IdProveedor) REFERENCES Usuario(IdUsuario),
     FOREIGN KEY (IdCatProducto) REFERENCES CatProducto(IdCatProducto)
 );
-
-ALTER TABLE Producto
-ADD Descripcion VARCHAR(500);
-
                         
 -- CREATE TABLE IF NOT EXISTS Comprador (
 -- 	IdComprador INT AUTO_INCREMENT PRIMARY KEY,
@@ -108,13 +101,35 @@ CREATE TABLE IF NOT EXISTS Oferta( #Oferttaaaaaaaaa!!!!
 	FechaCreacion DATETIME,
 	FechaModificacion DATETIME,
 	Estado BOOL,
+    ValorUProducto FLOAT,
     FOREIGN KEY (IdProveedor) REFERENCES Usuario(IdUsuario),
 	FOREIGN KEY (IdProducto) REFERENCES Producto(IdProducto),
     FOREIGN KEY (IdEstadosOferta) REFERENCES EstadosOferta(IdEstadosOferta)
 );
 
-ALTER TABLE Oferta
-ADD ValorUProducto FLOAT;
+
+#Tabla de pagos pendientes
+CREATE TABLE Compra(
+	IdCompra INT AUTO_INCREMENT PRIMARY KEY,
+	IdProveedor INT,
+    IdComprador INT,
+    IdOferta INT,
+    #IdOfertaComprador INT,
+    Cantidad INT,
+    Total FLOAT,
+    Descripcion VARCHAR(500),
+    Observacion VARCHAR(300),
+    Fecha DATETIME,
+    IdEstado INT, #Clave foraneo a estadosOferta
+    MetodoPago VARCHAR(10), #Este campo sera para saber si fue reserva o pago directo
+    PagadoAProveedor BOOL,  #Es para verificar si ya se ha completado el pago al proveedor!!
+    FOREIGN KEY (IdProveedor) REFERENCES Usuario(IdUsuario),
+    #FOREIGN KEY (IdOfertaComprador) REFERENCES OfertaComprador(IdOfertaComprador),
+    FOREIGN KEY (IdEstado) REFERENCES EstadosOferta(IdEstadosOferta),
+    FOREIGN KEY (IdComprador) REFERENCES Usuario(IdUsuario),
+    FOREIGN KEY (IdOferta) REFERENCES Oferta(IdOferta)
+);
+
 
 CREATE TABLE IF NOT EXISTS Notificacion (
 	IdNotificacion INT AUTO_INCREMENT PRIMARY KEY,
@@ -161,28 +176,6 @@ CREATE TABLE Reportes(
     FOREIGN KEY (IdOferta) REFERENCES Oferta(IdOferta)
 );
 
-
-#Tabla de pagos pendientes
-CREATE TABLE Compra(
-	IdCompra INT AUTO_INCREMENT PRIMARY KEY,
-	IdProveedor INT,
-    IdComprador INT,
-    IdOferta INT,
-    #IdOfertaComprador INT,
-    Cantidad INT,
-    Total FLOAT,
-    Descripcion VARCHAR(500),
-    Observacion VARCHAR(300),
-    Fecha DATETIME,
-    IdEstado INT, #Clave foraneo a estadosOferta
-    MetodoPago VARCHAR(10), #Este campo sera para saber si fue reserva o pago directo
-    PagadoAProveedor BOOL,  #Es para verificar si ya se ha completado el pago al proveedor!!
-    FOREIGN KEY (IdProveedor) REFERENCES Usuario(IdUsuario),
-    #FOREIGN KEY (IdOfertaComprador) REFERENCES OfertaComprador(IdOfertaComprador),
-    FOREIGN KEY (IdEstado) REFERENCES EstadosOferta(IdEstadosOferta),
-    FOREIGN KEY (IdComprador) REFERENCES Usuario(IdUsuario),
-    FOREIGN KEY (IdOferta) REFERENCES Oferta(IdOferta)
-);
 
 /*CREATE TABLE Venta(
 	IdVenta INT AUTO_INCREMENT PRIMARY KEY,
@@ -257,12 +250,6 @@ CREATE TABLE TipoNotificacion(
 ALTER TABLE Notificacion
 ADD IdTipoNotificacion INT,
 ADD	FOREIGN KEY (IdTipoNotificacion) REFERENCES TipoNotificacion(IdTipoNotificacion);
-
-
-CALL GetTimeNow(@ahora);
-SELECT @ahora as ahora;
-
-SELECT getnow();
 
 SELECT * FROM Oferta ofe JOIN Producto pr WHERE ofe.IdProducto = pr.IdProducto AND pr.Name LIKE "%fin%";
 
