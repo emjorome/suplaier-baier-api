@@ -6,9 +6,9 @@ const mysql = require("mysql2");
 const myconn = require("express-myconnection");
 require("dotenv").config();
 const dbOptions = {
-  host: "localhost",
-  port: "3306",
-  user: process.env.PASSWORD,
+  host: process.env.HOST,
+  port: process.env.PORT,
+  user: process.env.USER,
   password: process.env.PASSWORD,
   database: "DbContabilly",
 };
