@@ -10,7 +10,7 @@ const dbOptions = {
   port: process.env.PORT,
   user: process.env.USER,
   password: process.env.PASSWORD,
-  database: "DbContabilly",
+  database: process.env.DATABASE,
 };
 
 const middlewares = require("./middlewares");
