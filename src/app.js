@@ -5,12 +5,20 @@ const cors = require("cors");
 const mysql = require("mysql2");
 const myconn = require("express-myconnection");
 require("dotenv").config();
-const dbOptions = {
+/*const dbOptions = {
   host: process.env.HOST,
   port: process.env.DB_PORT,
   user: process.env.USER,
   password: process.env.PASSWORD,
   database: process.env.DATABASE,
+};*/
+
+const dbOptions = {
+  host: 'localhost',
+  port: '3306',
+  user: 'root',
+  password: 'root',
+  database: 'DbContabilly',
 };
 
 const middlewares = require("./middlewares");

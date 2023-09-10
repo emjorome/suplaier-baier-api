@@ -26,8 +26,7 @@ router.get('/', function(req, res, next) {
         `INSERT INTO Usuario (IdRol, Nombre, Identificacion, Usuario, Provincia, Contrasena, Email, Numero, Pais, Ciudad, Direccion, UrlLogoEmpresa) VALUES 
         (${IdRol}, '${Nombre}', '${Identificacion}', '${Usuario}','${Provincia}' ,'${Contrasena}', '${Email}', '${Numero}', '${Pais}', '${Ciudad}', '${Direccion}', '${urlImg}')`,
         (err, rows) => {
-          if(err) res.json(err);
-          res.json("Usuario creado exitosamente");
+          err ? res.json(err):  res.json("Usuario creado exitosamente");      
         }
       );
     })

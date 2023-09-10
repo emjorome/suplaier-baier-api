@@ -35,6 +35,7 @@ CREATE TABLE Usuario (
 	Email VARCHAR(50),
 	Numero VARCHAR(20),
 	Pais VARCHAR(50),
+	Provincia VARCHAR(50),
 	Ciudad VARCHAR(50),
 	Direccion VARCHAR(200),
     FOREIGN KEY (IdRol) REFERENCES Rol(IdRol)
@@ -52,7 +53,29 @@ ADD FirebaseToken VARCHAR(200);
 
 ALTER TABLE Usuario
 ADD UrlLogoEmpresa MEDIUMTEXT;
-                        
+
+CREATE TABLE IF NOT EXISTS solicitudesregistro (
+	IdSolicitud INT AUTO_INCREMENT PRIMARY KEY,
+    IdRol INT,
+	Nombre VARCHAR(100),
+	Identificacion VARCHAR(15),
+	Usuario VARCHAR(20),
+	Contrasena VARCHAR(50),
+	Email VARCHAR(50),
+	Numero VARCHAR(20),
+	Pais VARCHAR(50),
+	Provincia VARCHAR(50),
+	Ciudad VARCHAR(50),
+	Direccion VARCHAR(200),
+    FechaSolicitud DATETIME,
+    Estado ENUM('pendiente', 'aprobada', 'rechazada') DEFAULT 'pendiente',
+    FOREIGN KEY (IdRol) REFERENCES Rol(IdRol)
+);
+
+ALTER TABLE solicitudesregistro
+ADD UrlLogoEmpresa MEDIUMTEXT;
+
+
 CREATE TABLE IF NOT EXISTS Producto (
 	IdProducto INT AUTO_INCREMENT PRIMARY KEY,
     IdProveedor INT,
@@ -191,15 +214,15 @@ INSERT INTO Rol(Rol, FechaCreacion) VALUES
 #DROP COLUMN Identifcacion,
 #ADD Identificacion VARCHAR(13);
 
-INSERT INTO Usuario(IdRol, Nombre, Identificacion, Usuario, Contrasena, Email, Numero, Pais, Ciudad, Direccion) VALUES 
-(1, 'Walther Duran', '1205801515', 'wduran', 'wduran1234', 'wduran@gmail.com', '+593998950947', 'Ecuador', 'Guayaquil', 'Samanes'),
-(1, 'Karla Duran', '1205801516', 'kduran', 'kduran1234', 'kduran@gmail.com', '+593998950948', 'Ecuador', 'Guayaquil', 'Samanes'),
-(2, 'Helena Crespo', '0905801320', 'hcrespo', 'hcrespo1234', 'hcrespo@gmail.com', '+593998950948', 'Austria', 'Vienna', 'Auskunft-022'),
-(2, 'Algodón S.A.', '0905801320', 'algodonsa', 'algodonsa1234', 'algodonsa@gmail.com', '+593998950948', 'Ecuador', 'Babahoyo', 'Calle 42'),
-(2, 'Electrika', '0905801320', 'electrika', 'electrika1234', 'electrika@gmail.com', '+593998950948', 'Ecuador', 'Manta', 'Calle 23'),
-(2, 'Agrícola S.A.', '0905801320', 'agricola', 'agricola1234', 'agricola@gmail.com', '+593998950948', 'Ecuador', 'Ventanas', 'Calle 13'),
-(2, 'Brocolistos', '0905801320', 'brocolistos', 'brocolistos1234', 'brocolistos@gmail.com', '+593998950948', 'Ecuador', 'Guayaquil', 'Sur'),
-(3, 'Carlos Duran', '1205801325', 'cduran', 'cduran1234', 'cduran@gmail.com', '+593998950948', 'Ecuador', 'Guayaquil', 'Auskunft-022');
+INSERT INTO Usuario(IdRol, Nombre, Identificacion, Usuario, Contrasena, Email, Numero, Pais, Provincia, Ciudad, Direccion) VALUES 
+(1, 'Walther Duran', '1205801515', 'wduran', 'wduran1234', 'wduran@gmail.com', '+593998950947', 'Ecuador', 'Guayas', 'Guayaquil', 'Samanes'),
+(1, 'Karla Duran', '1205801516', 'kduran', 'kduran1234', 'kduran@gmail.com', '+593998950948', 'Ecuador', 'Guayas', 'Guayaquil', 'Samanes'),
+(2, 'Helena Crespo', '0905801320', 'hcrespo', 'hcrespo1234', 'hcrespo@gmail.com', '+593998950948', 'Austria', 'Vienna', 'Vienna', 'Auskunft-022'),
+(2, 'Algodón S.A.', '0905801320', 'algodonsa', 'algodonsa1234', 'algodonsa@gmail.com', '+593998950948', 'Ecuador', 'Los rios', 'Babahoyo', 'Calle 42'),
+(2, 'Electrika', '0905801320', 'electrika', 'electrika1234', 'electrika@gmail.com', '+593998950948', 'Ecuador', 'Manabi', 'Manta', 'Calle 23'),
+(2, 'Agrícola S.A.', '0905801320', 'agricola', 'agricola1234', 'agricola@gmail.com', '+593998950948', 'Ecuador', 'Los rios', 'Ventanas','Calle 13'),
+(2, 'Brocolistos', '0905801320', 'brocolistos', 'brocolistos1234', 'brocolistos@gmail.com', '+593998950948', 'Ecuador', 'Guayas', 'Guayaquil', 'Sur'),
+(3, 'Carlos Duran', '1205801325', 'cduran', 'cduran1234', 'cduran@gmail.com', '+593998950948', 'Ecuador', 'Guayas', 'Guayaquil', 'Auskunft-022');
 
 INSERT INTO EstadosOferta(Descripcion, FechaCrea, Activo) VALUES
 ('En curso', NOW(), true);
