@@ -19,12 +19,12 @@ router.get('/', function(req, res, next) {
   });
   
   router.post('/',function(req, res){
-    const { IdRol, Nombre, Identificacion, Usuario, Contrasena, Provincia, Email, Numero, Pais, Ciudad, Direccion, urlImg } = req.body;
+    const { IdRol, Nombre, Identificacion, Usuario, Contrasena, Provincia, Email, Numero, Pais, Ciudad, Direccion, UrlLogoEmpresa } = req.body;
     req.getConnection((err, conn) =>{
       if (err) return res.send(err);
       conn.query(
         `INSERT INTO Usuario (IdRol, Nombre, Identificacion, Usuario, Provincia, Contrasena, Email, Numero, Pais, Ciudad, Direccion, UrlLogoEmpresa) VALUES 
-        (${IdRol}, '${Nombre}', '${Identificacion}', '${Usuario}','${Provincia}' ,'${Contrasena}', '${Email}', '${Numero}', '${Pais}', '${Ciudad}', '${Direccion}', '${urlImg}')`,
+        (${IdRol}, '${Nombre}', '${Identificacion}', '${Usuario}','${Provincia}' ,'${Contrasena}', '${Email}', '${Numero}', '${Pais}', '${Ciudad}', '${Direccion}', '${UrlLogoEmpresa}')`,
         (err, rows) => {
           err ? res.json(err):  res.json("Usuario creado exitosamente");      
         }

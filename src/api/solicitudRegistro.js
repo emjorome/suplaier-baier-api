@@ -6,7 +6,7 @@ router.get('/', function(req, res, next) {
   req.getConnection((err, conn) =>{
     if(err) return res.send(err);
     conn.query(
-      `SELECT * FROM solicitudesregistro WHERE IdSolicitud = COALESCE(${id}, solicitudesregistro.IdSolicitud)`, 
+      `SELECT * FROM solicitudesregistro WHERE IdSolicitud = COALESCE(${id}, solicitudesregistro.IdSolicitud) AND solicitudesregistro.Estado='pendiente'`, 
       (err, rows) => {
         err? res.json(err) :  res.json({rows});
         //mailer.enviarCorreo('kaduran1998@gmail.com', 'tema de prueba', rows[0].Estado.toString());
@@ -22,17 +22,33 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/',function(req, res){
-    const { IdRol, Nombre, Identificacion, Usuario, Contrasena, Provincia, Email, Numero, Pais, Ciudad, Direccion, urlImg } = req.body;
+    const { IdRol, Nombre, Identificacion, Usuario, Contrasena, Provincia, Email, Numero, Pais, Ciudad, Direccion, UrlLogoEmpresa } = req.body;
     req.getConnection((err, conn) =>{
       if (err) return res.send(err);
       conn.query(
         `INSERT INTO solicitudesregistro (IdRol, Nombre, Identificacion, Usuario, Provincia, Contrasena, Email, Numero, Pais, Ciudad, Direccion, UrlLogoEmpresa, FechaSolicitud) VALUES 
-        (${IdRol}, '${Nombre}', '${Identificacion}', '${Usuario}','${Provincia}' ,'${Contrasena}', '${Email}', '${Numero}', '${Pais}', '${Ciudad}', '${Direccion}', '${urlImg}', NOW() )`,
+        (${IdRol}, '${Nombre}', '${Identificacion}', '${Usuario}','${Provincia}' ,'${Contrasena}', '${Email}', '${Numero}', '${Pais}', '${Ciudad}', '${Direccion}', '${UrlLogoEmpresa}', NOW() )`,
         (err, rows) => {
           err ? res.json(err):  res.json("Solicitud creada exitosamente");      
         }
       );
     })
+});
+
+
+router.patch('/', (req, res, next) => {
+  const {IdSolicitud, Estado} = req.body;
+  req.getConnection((err, conn) => {
+    if(err) return res.send(err);
+    conn.query(
+      `UPDATE solicitudesregistro 
+      SET Estado = '${Estado}'
+      WHERE IdSolicitud =${IdSolicitud}`,
+      (err, rows) => {
+        err ? console.log(err) : res.json(rows);
+      }
+    )
+  })
 });
 
 
