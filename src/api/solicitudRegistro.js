@@ -36,4 +36,24 @@ router.post('/',function(req, res){
 });
 
 
+router.delete('/:IdUser', function (req, res) {
+  const IdUser = req.params.IdUser;
+  req.getConnection((err, conn) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ message: 'Internal server error' });
+    }
+    conn.query(
+      `DELETE FROM solicitudesregistro WHERE IdSolicitud = ${IdUser};`,
+      (err, result) => {
+        if (err) {
+          console.error(err);
+          return res.status(500).json({ message: 'Failed to delete user' });
+        }
+       
+      }
+    );
+  });
+});
+
 module.exports = router;

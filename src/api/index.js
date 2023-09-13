@@ -20,6 +20,7 @@ const cambiarOfertaEstado = require('./cambiarOfertaEstado');
 const reportes = require('./reportes');
 const enviarNotificacionCompra = require('./enviarNotificacionCompra');
 const enviarSolicitudesRegistro = require('./solicitudRegistro');
+const aceptarSolicitudRegistro = require('./aceptarRegistro')
 const router = express.Router();
 
 router.get('/', (req, res) => {
@@ -48,5 +49,5 @@ router.use('/ofertabyproductolike', ofertaByProductoLike);
 router.use('/reportes', reportes);
 router.use('/enviarNotificacionCompra', enviarNotificacionCompra);
 router.use('/solicitudRegistro', enviarSolicitudesRegistro);
-
+router.use('/aceptarRegistro', aceptarSolicitudRegistro);
 module.exports = router;
