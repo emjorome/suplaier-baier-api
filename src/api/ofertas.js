@@ -60,6 +60,23 @@ router.patch('/', (req, res, next) => {
   })
 });
 
+router.patch('/estadoOferta', (req, res, next) => {
+  const {IdOferta, IdEstadosOferta} = req.body;
+  req.getConnection((err, conn) => {
+    if(err) return res.send(err);
+    conn.query(
+      `UPDATE oferta
+      SET IdEstadosOferta = '${IdEstadosOferta}'
+      WHERE IdOferta =${IdOferta}`,
+      (err, rows) => {
+        err ? console.log(err) : res.json(rows);
+      }
+    )
+  })
+});
+
+
+
 // router.post('/join', (req, res, next) => {
 //   const {IdPublicacion, IdUsuario, Cantidad} = req.body;
 //   req.getConnection((err, conn) => {
