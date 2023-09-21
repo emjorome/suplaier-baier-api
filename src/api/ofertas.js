@@ -27,6 +27,56 @@ router.get('/', function(req, res, next) {
   });
 });
 
+router.get('/orderFechaMayor', function(req, res, next) {
+  const id = req.query.id === undefined ? null : req.query.id;
+  const idProveedor = req.query.idProveedor === undefined ? null : req.query.idProveedor;
+  const idEstadosOferta = req.query.idEstadosOferta === undefined ? null : req.query.idEstadosOferta;
+  req.getConnection((err, conn) =>{
+    if(err) return res.send(err);
+    conn.query(
+      `SELECT * FROM Oferta WHERE IdOferta = COALESCE(${id}, Oferta.IdOferta)
+      AND IdProveedor = COALESCE(${idProveedor}, Oferta.IdProveedor)
+      AND IdEstadosOferta = COALESCE(${idEstadosOferta}, Oferta.IdEstadosOferta)
+      ORDER BY FechaLimite DESC`, 
+      (err, rows) => {
+        if(err) res.json(err);
+        //mailer.enviarCorreo('kaduran1998@gmail.com', 'tema de prueba', rows[0].Estado.toString());
+        // enviarNotificacionTopic({
+        //   title: "Oferta ha cambiado", 
+        //   message: "Prueba", 
+        //   token: "cihtSbtdqjnCsteQQZ10bW:APA91bFvDHZI1y5KR48Lus-zOn-SmAf_P2Plq49jtxxhsu60sQUJiaLm0I7PzPDKAdf43RWbsErONjwm7CJN5Gl6ZgZMJggJpJjXM62Mfoa7FRC_sbpT07JBLM0T_8mquEBWFdiiE-d9"
+        // })
+  
+        res.json({rows});
+    });
+  });
+});
+router.get('/orderFechaMenor', function(req, res, next) {
+  const id = req.query.id === undefined ? null : req.query.id;
+  const idProveedor = req.query.idProveedor === undefined ? null : req.query.idProveedor;
+  const idEstadosOferta = req.query.idEstadosOferta === undefined ? null : req.query.idEstadosOferta;
+  req.getConnection((err, conn) =>{
+    if(err) return res.send(err);
+    conn.query(
+      `SELECT * FROM Oferta WHERE IdOferta = COALESCE(${id}, Oferta.IdOferta)
+      AND IdProveedor = COALESCE(${idProveedor}, Oferta.IdProveedor)
+      AND IdEstadosOferta = COALESCE(${idEstadosOferta}, Oferta.IdEstadosOferta)
+      ORDER BY FechaLimite ASC`, 
+      (err, rows) => {
+        if(err) res.json(err);
+        //mailer.enviarCorreo('kaduran1998@gmail.com', 'tema de prueba', rows[0].Estado.toString());
+        // enviarNotificacionTopic({
+        //   title: "Oferta ha cambiado", 
+        //   message: "Prueba", 
+        //   token: "cihtSbtdqjnCsteQQZ10bW:APA91bFvDHZI1y5KR48Lus-zOn-SmAf_P2Plq49jtxxhsu60sQUJiaLm0I7PzPDKAdf43RWbsErONjwm7CJN5Gl6ZgZMJggJpJjXM62Mfoa7FRC_sbpT07JBLM0T_8mquEBWFdiiE-d9"
+        // })
+  
+        res.json({rows});
+    });
+  });
+});
+
+
 //IdOferta, IdProducto, IdProveedor, IdEstadosOferta, Minimo, Maximo, Descripcion, ActualProductos, FechaLimite, FechaCreacion, FechaModificacion, Estado, ValorUProducto
 
 router.post('/', (req, res, next) =>{
