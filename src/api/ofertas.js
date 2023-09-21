@@ -4,6 +4,8 @@ var router = express.Router();
 var mailer = require('../mailer');
 /* GET ofertas listing. */
 router.get('/', function(req, res, next) {
+  const {idsEstadosOferta} = req.query;
+  if (!idsEstadosOferta || idsEstadosOferta.trim() === '') {
   const id = req.query.id === undefined ? null : req.query.id;
   const idProveedor = req.query.idProveedor === undefined ? null : req.query.idProveedor;
   const idEstadosOferta = req.query.idEstadosOferta === undefined ? null : req.query.idEstadosOferta;
@@ -25,9 +27,30 @@ router.get('/', function(req, res, next) {
         res.json({rows});
     });
   });
+}else{
+  const idsArray = idsEstadosOferta.split(',').map(Number);
+  const idProveedor = req.query.idProveedor === undefined ? null : req.query.idProveedor;
+  const idEstadosOferta = req.query.idEstadosOferta === undefined ? null : req.query.idEstadosOferta; 
+  req.getConnection((err, conn) =>{
+    if(err) return res.send(err);
+    conn.query(
+      `SELECT * FROM oferta WHERE IdEstadosOferta IN (?) 
+      AND IdProveedor = COALESCE(${idProveedor}, Oferta.IdProveedor)
+      AND IdEstadosOferta = COALESCE(${idEstadosOferta}, Oferta.IdEstadosOferta)
+      `, [idsArray], 
+      (err, rows) => {
+        if(err) res.json(err);
+        res.json({rows});
+    });
+  });
+
+}
+
 });
 
 router.get('/orderFechaMayor', function(req, res, next) {
+  const {idsEstadosOferta} = req.query;
+  if (!idsEstadosOferta || idsEstadosOferta.trim() === '') {
   const id = req.query.id === undefined ? null : req.query.id;
   const idProveedor = req.query.idProveedor === undefined ? null : req.query.idProveedor;
   const idEstadosOferta = req.query.idEstadosOferta === undefined ? null : req.query.idEstadosOferta;
@@ -40,18 +63,34 @@ router.get('/orderFechaMayor', function(req, res, next) {
       ORDER BY FechaLimite DESC`, 
       (err, rows) => {
         if(err) res.json(err);
-        //mailer.enviarCorreo('kaduran1998@gmail.com', 'tema de prueba', rows[0].Estado.toString());
-        // enviarNotificacionTopic({
-        //   title: "Oferta ha cambiado", 
-        //   message: "Prueba", 
-        //   token: "cihtSbtdqjnCsteQQZ10bW:APA91bFvDHZI1y5KR48Lus-zOn-SmAf_P2Plq49jtxxhsu60sQUJiaLm0I7PzPDKAdf43RWbsErONjwm7CJN5Gl6ZgZMJggJpJjXM62Mfoa7FRC_sbpT07JBLM0T_8mquEBWFdiiE-d9"
-        // })
   
         res.json({rows});
     });
   });
+  }else{
+    const idsArray = idsEstadosOferta.split(',').map(Number);
+    const idProveedor = req.query.idProveedor === undefined ? null : req.query.idProveedor;
+    const idEstadosOferta = req.query.idEstadosOferta === undefined ? null : req.query.idEstadosOferta; 
+    req.getConnection((err, conn) =>{
+      if(err) return res.send(err);
+      conn.query(
+        `SELECT * FROM oferta WHERE IdEstadosOferta IN (?) 
+        AND IdProveedor = COALESCE(${idProveedor}, Oferta.IdProveedor)
+        AND IdEstadosOferta = COALESCE(${idEstadosOferta}, Oferta.IdEstadosOferta)
+        ORDER BY FechaLimite DESC `, [idsArray], 
+        (err, rows) => {
+          if(err) res.json(err);
+          res.json({rows});
+      });
+    });
+
+  }
+
 });
+
 router.get('/orderFechaMenor', function(req, res, next) {
+  const {idsEstadosOferta} = req.query;
+  if (!idsEstadosOferta || idsEstadosOferta.trim() === '') {
   const id = req.query.id === undefined ? null : req.query.id;
   const idProveedor = req.query.idProveedor === undefined ? null : req.query.idProveedor;
   const idEstadosOferta = req.query.idEstadosOferta === undefined ? null : req.query.idEstadosOferta;
@@ -64,16 +103,28 @@ router.get('/orderFechaMenor', function(req, res, next) {
       ORDER BY FechaLimite ASC`, 
       (err, rows) => {
         if(err) res.json(err);
-        //mailer.enviarCorreo('kaduran1998@gmail.com', 'tema de prueba', rows[0].Estado.toString());
-        // enviarNotificacionTopic({
-        //   title: "Oferta ha cambiado", 
-        //   message: "Prueba", 
-        //   token: "cihtSbtdqjnCsteQQZ10bW:APA91bFvDHZI1y5KR48Lus-zOn-SmAf_P2Plq49jtxxhsu60sQUJiaLm0I7PzPDKAdf43RWbsErONjwm7CJN5Gl6ZgZMJggJpJjXM62Mfoa7FRC_sbpT07JBLM0T_8mquEBWFdiiE-d9"
-        // })
   
         res.json({rows});
     });
   });
+  }else{
+    const idsArray = idsEstadosOferta.split(',').map(Number);
+    const idProveedor = req.query.idProveedor === undefined ? null : req.query.idProveedor;
+    const idEstadosOferta = req.query.idEstadosOferta === undefined ? null : req.query.idEstadosOferta; 
+    req.getConnection((err, conn) =>{
+      if(err) return res.send(err);
+      conn.query(
+        `SELECT * FROM oferta WHERE IdEstadosOferta IN (?) 
+        AND IdProveedor = COALESCE(${idProveedor}, Oferta.IdProveedor)
+        AND IdEstadosOferta = COALESCE(${idEstadosOferta}, Oferta.IdEstadosOferta)
+        ORDER BY FechaLimite ASC `, [idsArray], 
+        (err, rows) => {
+          if(err) res.json(err);
+          res.json({rows});
+      });
+    });
+
+  }
 });
 
 
