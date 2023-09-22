@@ -129,6 +129,8 @@ CREATE TABLE IF NOT EXISTS Oferta( #Oferttaaaaaaaaa!!!!
 	FOREIGN KEY (IdProducto) REFERENCES Producto(IdProducto),
     FOREIGN KEY (IdEstadosOferta) REFERENCES EstadosOferta(IdEstadosOferta)
 );
+ALTER TABLE Oferta
+ADD ValorUInstantaneo FLOAT;
 
 
 #Tabla de pagos pendientes

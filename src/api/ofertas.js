@@ -2,6 +2,7 @@ var express = require('express');
 const { enviarNotificacionTopic } = require('../firebaseMesagging');
 var router = express.Router();
 var mailer = require('../mailer');
+
 /* GET ofertas listing. */
 router.get('/', function(req, res, next) {
   const {idsEstadosOferta} = req.query;
@@ -131,12 +132,12 @@ router.get('/orderFechaMenor', function(req, res, next) {
 //IdOferta, IdProducto, IdProveedor, IdEstadosOferta, Minimo, Maximo, Descripcion, ActualProductos, FechaLimite, FechaCreacion, FechaModificacion, Estado, ValorUProducto
 
 router.post('/', (req, res, next) =>{
-  const {IdProducto, IdProveedor, IdEstadosOferta, Minimo, Maximo, Descripcion, ActualProductos, FechaLimite, Estado, ValorUProducto} = req.body;
+  const {IdProducto, IdProveedor, IdEstadosOferta, Minimo, Maximo, Descripcion, ActualProductos, FechaLimite, Estado, ValorUProducto, ValorUInstantaneo} = req.body;
   req.getConnection((err, conn) =>{
     if(err) return res.send(err);
     conn.query(
-      `INSERT INTO Oferta (IdProducto, IdProveedor, IdEstadosOferta, Minimo, Maximo, Descripcion, ActualProductos, FechaLimite, FechaCreacion, FechaModificacion, Estado, ValorUProducto) 
-        VALUES (${IdProducto},${IdProveedor},${IdEstadosOferta},${Minimo}, ${Maximo}, "${Descripcion}", ${ActualProductos}, "${FechaLimite}", NOW(), NOW(), ${Estado}, ${ValorUProducto})`, 
+      `INSERT INTO Oferta (IdProducto, IdProveedor, IdEstadosOferta, Minimo, Maximo, Descripcion, ActualProductos, FechaLimite, FechaCreacion, FechaModificacion, Estado, ValorUProducto, ValorUInstantaneo) 
+        VALUES (${IdProducto},${IdProveedor},${IdEstadosOferta},${Minimo}, ${Maximo}, "${Descripcion}", ${ActualProductos}, "${FechaLimite}", NOW(), NOW(), ${Estado}, ${ValorUProducto}, ${ValorUInstantaneo})`, 
       (err, rows) => {
         if(err) console.log(err);
         res.json(rows);
