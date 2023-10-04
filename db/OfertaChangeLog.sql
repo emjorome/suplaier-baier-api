@@ -1,37 +1,51 @@
-CREATE TABLE OfertaChangeLog (
-  Id INT AUTO_INCREMENT PRIMARY KEY,
-  IdOferta INT,
-  IdUsuario INT,
+USE dbcontabilly;
+-- Create the Audit Log Table
+CREATE TABLE OfertaAuditLog (
+  AuditLogId INT AUTO_INCREMENT PRIMARY KEY,
+  OfertaId INT,
+  OldIdEstadosOferta INT,
+  ActualProductosChange INT,
   ChangeType ENUM('INSERT', 'UPDATE', 'DELETE'),
-  ChangeTime DATETIME,
-  Details JSON
-  FOREIGN KEY (IdOferta) REFERENCES Oferta(IdOferta),
-  FOREIGN KEY (IdUsuario) REFERENCES Usuario(IdUsuario)
+  ChangeTime TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (OfertaId) REFERENCES Oferta(IdOferta)
 );
 
-
+-- Trigger for INSERTs
+DELIMITER //
 CREATE TRIGGER AfterInsertOferta
 AFTER INSERT ON Oferta
 FOR EACH ROW
 BEGIN
-  INSERT INTO OfertaChangeLog (IdOferta, IdUsuario, ChangeType, ChangeTime, Details)
-  VALUES (NEW.IdOferta, :UserId, 'INSERT', NOW(), JSON_OBJECT('message', 'Record inserted'));
+  INSERT INTO OfertaAuditLog (OfertaId, OldIdEstadosOferta, ActualProductosChange, ChangeType)
+  VALUES (NEW.IdOferta, NEW.IdEstadosOferta, NULL, 'INSERT');
 END;
+//
 
-
+-- Trigger for UPDATEs
+DELIMITER //
 CREATE TRIGGER AfterUpdateOferta
 AFTER UPDATE ON Oferta
 FOR EACH ROW
 BEGIN
-  INSERT INTO OfertaChangeLog (IdOferta, IdUsuario, ChangeType, ChangeTime, Details)
-  VALUES (NEW.IdOferta, :UserId, 'UPDATE', NOW(), JSON_OBJECT('message', 'Record updated'));
+  INSERT INTO OfertaAuditLog (OfertaId, OldIdEstadosOferta, ActualProductosChange, ChangeType)
+  VALUES (NEW.IdOferta, NEW.IdEstadosOferta, NEW.ActualProductos - OLD.ActualProductos, 'UPDATE');
 END;
+//
 
-
+-- Trigger for DELETEs
+DELIMITER //
 CREATE TRIGGER AfterDeleteOferta
 AFTER DELETE ON Oferta
 FOR EACH ROW
 BEGIN
-  INSERT INTO OfertaChangeLog (IdOferta, IdUsuario, ChangeType, ChangeTime, Details)
-  VALUES (OLD.IdOferta, :UserId, 'DELETE', NOW(), JSON_OBJECT('message', 'Record deleted'));
+  INSERT INTO OfertaAuditLog (OfertaId, OldIdEstadosOferta, ActualProductosChange, ChangeType)
+  VALUES (OLD.IdOferta, OLD.IdEstadosOferta, NULL, 'DELETE');
 END;
+//
+
+DELIMITER ;
+UPDATE Oferta
+SET IdEstadosOferta = 2, ActualProductos = 50
+WHERE IdOferta = 3;
+
+
