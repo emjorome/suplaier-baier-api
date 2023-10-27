@@ -35,7 +35,7 @@ router.post('/',function(req, res){
         `INSERT INTO Producto (Descripcion, Activo, FechaCreacion, FechaModificacion, Valoracion, Name, IdCatProducto, IdProveedor, UrlImg) VALUES 
         ('${Descripcion}', ${Activo}, NOW(), NOW(), ${Valoracion}, '${Name}', ${IdCatProducto}, ${IdProveedor}, '${UrlImg}')`,
         (err, rows) => {
-          if(err) res.json(err);
+          if(err) console.log(res.json(err));
           res.json("Producto creado exitosamente");
         }
       );
