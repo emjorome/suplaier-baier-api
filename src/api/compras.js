@@ -18,8 +18,25 @@ router.get('/', function(req, res, next) {
       AND c.IdOferta = COALESCE(${idOferta}, c.IdOferta)
       AND c.IdEstado = COALESCE(${idEstado}, c.IdEstado)`, 
       (err, rows) => {
-        if(err) res.json(err);
-        res.json({rows});
+        err? res.json(err) :  res.json({rows});
+
+    });
+  });
+});
+
+router.get('/estaUnido', function(req, res, next) {
+  const idComprador = req.query.idComprador === undefined ? null : req.query.idComprador;
+  const idOferta = req.query.idOferta === undefined ? null : req.query.idOferta;
+  
+  req.getConnection((err, conn) =>{
+    if(err) return res.send(err);
+    conn.query(
+      `SELECT COUNT (*) FROM Compra c WHERE c.IdComprador = COALESCE(${idComprador}, c.IdComprador)
+      AND c.IdOferta = COALESCE(${idOferta}, c.IdOferta)
+      `, 
+      (err, rows) => {
+        err? res.json(err) :  res.json({rows});
+
     });
   });
 });
@@ -35,8 +52,8 @@ router.post('/', (req, res, next) =>{
       `INSERT INTO Compra (IdProveedor, IdComprador, IdOferta, Cantidad, Total, Descripcion, Observacion, Fecha, IdEstado, MetodoPago, PagadoAProveedor) 
         VALUES (${IdProveedor},${IdComprador},${IdOferta},${Cantidad}, ${Total}, "${Descripcion}", "${Observacion}", NOW(), ${IdEstado}, "${MetodoPago}", ${PagadoAProveedor})`, 
       (err, rows) => {
-        if(err) console.log(err);
-        res.json(rows);
+        err? res.json(err) :  res.json({rows});
+
     });
   });
 });
@@ -51,13 +68,14 @@ router.patch('/', (req, res, next) => {
         SET comp.IdEstado = COALESCE(${IdEstado}, comp.IdEstado), comp.PagadoAProveedor = COALESCE(${PagadoAProveedor}, comp.PagadoAProveedor)
         WHERE comp.IdCompra = COALESCE(${IdCompra}, comp.IdCompra)`,
       (err, rows) => {
-        if(err) console.log(err);
+        err? res.json(err) :  res.json({rows});
+
         // enviarNotificacionTopic({
         //   title: "Oferta ha cambiado", 
         //   message: "Prueba", 
         //   token: "cihtSbtdqjnCsteQQZ10bW:APA91bFvDHZI1y5KR48Lus-zOn-SmAf_P2Plq49jtxxhsu60sQUJiaLm0I7PzPDKAdf43RWbsErONjwm7CJN5Gl6ZgZMJggJpJjXM62Mfoa7FRC_sbpT07JBLM0T_8mquEBWFdiiE-d9"
         // })
-        res.json(rows);
+
       }
     )
   })

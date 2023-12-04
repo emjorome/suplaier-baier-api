@@ -17,8 +17,8 @@ router.get('/', function(req, res, next) {
         WHERE IdProducto = COALESCE(${id}, p.IdProducto) 
         AND IdProveedor = COALESCE(${idProveedor}, p.IdProveedor)`, 
       (err, rows) => {
-        if(err) res.json(err);
-        res.json({rows});
+        err? res.json(err) :  res.json({rows});
+
     });
   });
 });
@@ -35,8 +35,7 @@ router.post('/',function(req, res){
         `INSERT INTO Producto (Descripcion, Activo, FechaCreacion, FechaModificacion, Valoracion, Name, IdCatProducto, IdProveedor, UrlImg) VALUES 
         ('${Descripcion}', ${Activo}, NOW(), NOW(), ${Valoracion}, '${Name}', ${IdCatProducto}, ${IdProveedor}, '${UrlImg}')`,
         (err, rows) => {
-          if(err) console.log(res.json(err));
-          res.json("Producto creado exitosamente");
+          err ?  console.log(res.json(err)) :res.json("Producto creado exitosamente");
         }
       );
     })
@@ -52,8 +51,8 @@ router.patch('/', (req, res, next) => {
         SET prod.Valoracion = COALESCE(${ValoracionNueva}, prod.Valoracion)
         WHERE prod.IdProducto = COALESCE(${idProducto}, prod.IdProducto)`,
       (err, rows) => {
-        if(err) console.log(err);
-        res.json(rows);
+        err? res.json(err) :  res.json({rows});
+
       }
     )
   })
