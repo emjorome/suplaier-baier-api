@@ -154,6 +154,8 @@ CREATE TABLE Compra(
     FOREIGN KEY (IdComprador) REFERENCES Usuario(IdUsuario),
     FOREIGN KEY (IdOferta) REFERENCES Oferta(IdOferta)
 );
+ALTER TABLE Compra
+ADD TipoCompra ENUM('instantanea', 'normal') DEFAULT 'normal';
 
 
 CREATE TABLE IF NOT EXISTS Notificacion (
