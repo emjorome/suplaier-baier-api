@@ -72,13 +72,15 @@ CREATE TABLE IF NOT EXISTS solicitudesregistro (
     FOREIGN KEY (IdRol) REFERENCES Rol(IdRol)
 );
 
+
+
 ALTER TABLE solicitudesregistro
 ADD UrlLogoEmpresa MEDIUMTEXT;
 
 
 CREATE TABLE IF NOT EXISTS Producto (
 	IdProducto INT AUTO_INCREMENT PRIMARY KEY,
-    IdProveedor INT,
+    IdUsuario INT,
     IdCatProducto INT,
 	Descripcion VARCHAR(500),
 	Activo BOOL, 
@@ -87,7 +89,7 @@ CREATE TABLE IF NOT EXISTS Producto (
 	FechaCreacion DATETIME,
 	FechaModificacion DATETIME,
 	Valoracion FLOAT,
-    FOREIGN KEY (IdProveedor) REFERENCES Usuario(IdUsuario),
+    FOREIGN KEY (IdUsuario) REFERENCES Usuario(IdUsuario),
     FOREIGN KEY (IdCatProducto) REFERENCES CatProducto(IdCatProducto)
 );
                         
@@ -133,6 +135,36 @@ ALTER TABLE Oferta
 ADD ValorUInstantaneo FLOAT;
 
 
+CREATE TABLE IF NOT EXISTS Demanda( 
+	IdDemanda INT AUTO_INCREMENT PRIMARY KEY,
+	IdProducto INT ,
+    IdComprador INT,
+    IdEstadosOferta INT,
+	Minimo INT,
+	Maximo INT,
+    PrecioMinimo INT,
+    PrecioMaximo INT,
+	Descripcion VARCHAR(500),
+	ActualProductos INT,
+	FechaLimite DATETIME,
+	FechaCreacion DATETIME,
+	FechaModificacion DATETIME,
+	Estado BOOL,
+    FOREIGN KEY (IdComprador) REFERENCES Usuario(IdUsuario),
+	FOREIGN KEY (IdProducto) REFERENCES Producto(IdProducto),
+    FOREIGN KEY (IdEstadosOferta) REFERENCES EstadosOferta(IdEstadosOferta)
+);
+
+CREATE TABLE IF NOT EXISTS Propuesta( 
+	IdPropuesta INT AUTO_INCREMENT PRIMARY KEY,
+	IdDemanda INT,
+    IdProveedor INT,
+    Precio INT,
+    Cantidad INT,
+	Estado ENUM('pendiente', 'aprobada', 'rechazada') DEFAULT 'pendiente',
+    FOREIGN KEY (IdDemanda) REFERENCES Demanda(IdDemanda),
+	FOREIGN KEY (IdProveedor) REFERENCES Usuario(IdUsuario),
+);
 #Tabla de pagos pendientes
 CREATE TABLE Compra(
 	IdCompra INT AUTO_INCREMENT PRIMARY KEY,
