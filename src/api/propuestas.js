@@ -7,6 +7,19 @@ var router = express.Router();
     Precio INT,
     Cantidad INT,
 	Estado*/
+
+  router.get('/', function(req, res, next) {
+    const id = req.query.id === undefined ? null : req.query.id;
+    req.getConnection((err, conn) =>{
+      if(err) return res.send(err);
+      conn.query(
+        `SELECT * FROM propuetas WHERE IdPropuesta = COALESCE(${id}, propuestas.IdPropuesta) AND propuestas.Estado='pendiente'`, 
+        (err, rows) => {
+          err? res.json(err) :  res.json({rows});
+      });
+    });
+  });
+
 router.post('/',function(req, res){
     const { IdDemanda, IdProveedor, Precio, Cantidad, Estado } = req.body;
     req.getConnection((err, conn) =>{
@@ -36,3 +49,5 @@ router.patch('/', (req, res, next) => {
     )
   })
 });
+
+module.exports = router;

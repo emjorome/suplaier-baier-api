@@ -22,6 +22,8 @@ const enviarNotificacionCompra = require('./enviarNotificacionCompra');
 const enviarSolicitudesRegistro = require('./solicitudRegistro');
 const aceptarSolicitudRegistro = require('./aceptarRegistro');
 const HistorialOferta = require('./historialOferta');
+const demandas = require('./demandas');
+const propuestas = require('./propuestas')
 const router = express.Router();
 
 router.get('/', (req, res) => {
@@ -52,4 +54,6 @@ router.use('/enviarNotificacionCompra', enviarNotificacionCompra);
 router.use('/solicitudRegistro', enviarSolicitudesRegistro);
 router.use('/aceptarRegistro', aceptarSolicitudRegistro);
 router.use('/historialOferta',HistorialOferta);
+router.use('/demandas',demandas);
+router.use('./propuestas',propuestas)
 module.exports = router;
