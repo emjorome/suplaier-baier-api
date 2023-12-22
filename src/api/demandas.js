@@ -13,8 +13,8 @@ router.get('/', function(req, res, next) {
       if(err) return res.send(err);
       conn.query(
         `SELECT * FROM demanda WHERE IdDemanda = COALESCE(${id}, demanda.IdDemanda)
-        AND IdComprador = COALESCE(${idComprador}, demanda.IdComprador)
-        AND IdEstadosOferta = COALESCE(${idEstadosOferta}, Oferta.IdEstadosOferta)`, 
+        AND IdComprador = COALESCE(${IdComprador}, demanda.IdComprador)
+        AND IdEstadosOferta = COALESCE(${idEstadosOferta}, demanda.IdEstadosOferta)`, 
         (err, rows) => {
           if(err) res.json(err);
           //mailer.enviarCorreo('kaduran1998@gmail.com', 'tema de prueba', rows[0].Estado.toString());
@@ -29,13 +29,13 @@ router.get('/', function(req, res, next) {
     });
   }else{
     const idsArray = idsEstadosOferta.split(',').map(Number);
-    const idComprador = req.query.idComprador === undefined ? null : req.query.idComprador;
+    const IdComprador = req.query.IdComprador === undefined ? null : req.query.IdComprador;
     const idEstadosOferta = req.query.idEstadosOferta === undefined ? null : req.query.idEstadosOferta; 
     req.getConnection((err, conn) =>{
       if(err) return res.send(err);
       conn.query(
         `SELECT * FROM demanda WHERE IdEstadosOferta IN (?) 
-        AND IdComprador = COALESCE(${idComprador}, demanda.IdComprador)
+        AND IdComprador = COALESCE(${IdComprador}, demanda.IdComprador)
         AND IdEstadosOferta = COALESCE(${idEstadosOferta}, Oferta.IdEstadosOferta)
         `, [idsArray], 
         (err, rows) => {
@@ -55,10 +55,10 @@ router.post('/', (req, res, next) =>{
     req.getConnection((err, conn) =>{
       if(err) return res.send(err);
       conn.query(
-        `INSERT INTO demanda (IdProducto, IdComprador, IdEstadosOferta, Minimo, Maximo, PrecioMinimo, PrecioMaximo, Descripcion, ActualProductos, FechaLimite, FechaCreacion, FechaModificacion, Estado) 
-          VALUES (${IdProducto},${IdComprador},${IdEstadosOferta},${Minimo}, ${Maximo},${PrecioMinimo}, ${PrecioMaximo}, "${Descripcion}", ${ActualProductos}, "${FechaLimite}", NOW(), NOW(), ${Estado}})`, 
+        `INSERT INTO Demanda (IdProducto, IdComprador, IdEstadosOferta, Minimo, Maximo, PrecioMinimo, PrecioMaximo, Descripcion, ActualProductos, FechaLimite, FechaCreacion, FechaModificacion, Estado) 
+          VALUES (${IdProducto},${IdComprador},${IdEstadosOferta},${Minimo}, ${Maximo},${PrecioMinimo}, ${PrecioMaximo}, "${Descripcion}", ${ActualProductos}, "${FechaLimite}", NOW(), NOW(), ${Estado})`, 
         (err, rows) => {
-          if(err) console.log("holiwi");
+          if(err) console.log(err);
           res.json(rows);
       });
     });
@@ -70,7 +70,7 @@ router.post('/', (req, res, next) =>{
     req.getConnection((err, conn) => {
       if(err) return res.send(err);
       conn.query(
-        `UPDATE demanda dem
+        `UPDATE demanda
         SET ofe.ActualProductos = COALESCE(${NuevoActualProductos}, ofe.ActualProductos)
         WHERE ofe.IdDemanda = COALESCE(${IdDemanda}, ofe.IdDemanda)`,
         (err, rows) => {

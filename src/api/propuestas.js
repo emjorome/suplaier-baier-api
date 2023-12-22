@@ -13,7 +13,7 @@ var router = express.Router();
     req.getConnection((err, conn) =>{
       if(err) return res.send(err);
       conn.query(
-        `SELECT * FROM propuetas WHERE IdPropuesta = COALESCE(${id}, propuestas.IdPropuesta) AND propuestas.Estado='pendiente'`, 
+        `SELECT * FROM propuesta WHERE IdPropuesta = COALESCE(${id}, propuesta.IdPropuesta) AND propuesta.Estado='pendiente'`, 
         (err, rows) => {
           err? res.json(err) :  res.json({rows});
       });
@@ -26,7 +26,7 @@ router.post('/',function(req, res){
       if (err) return res.send(err);
       conn.query(
         `INSERT INTO propuesta (IdDemanda, IdProveedor, Precio, Cantidad, Estado) VALUES 
-        (${IdDemanda}, '${IdProveedor}', '${{Precio}}', '${Cantidad}','${Estado}' )`,
+        (${IdDemanda}, '${IdProveedor}', '${Precio}', '${Cantidad}','${Estado}' )`,
         (err, rows) => {
           err ? res.json(err):  res.json("Propuesta Enviada Exitosamente");      
         }

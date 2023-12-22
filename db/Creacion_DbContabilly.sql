@@ -80,7 +80,7 @@ ADD UrlLogoEmpresa MEDIUMTEXT;
 
 CREATE TABLE IF NOT EXISTS Producto (
 	IdProducto INT AUTO_INCREMENT PRIMARY KEY,
-    IdUsuario INT,
+    IdProveedor INT,
     IdCatProducto INT,
 	Descripcion VARCHAR(500),
 	Activo BOOL, 
@@ -89,7 +89,7 @@ CREATE TABLE IF NOT EXISTS Producto (
 	FechaCreacion DATETIME,
 	FechaModificacion DATETIME,
 	Valoracion FLOAT,
-    FOREIGN KEY (IdUsuario) REFERENCES Usuario(IdUsuario),
+    FOREIGN KEY (IdProveedor) REFERENCES Usuario(IdUsuario),
     FOREIGN KEY (IdCatProducto) REFERENCES CatProducto(IdCatProducto)
 );
                         
@@ -163,7 +163,7 @@ CREATE TABLE IF NOT EXISTS Propuesta(
     Cantidad INT,
 	Estado ENUM('pendiente', 'aprobada', 'rechazada') DEFAULT 'pendiente',
     FOREIGN KEY (IdDemanda) REFERENCES Demanda(IdDemanda),
-	FOREIGN KEY (IdProveedor) REFERENCES Usuario(IdUsuario),
+	FOREIGN KEY (IdProveedor) REFERENCES Usuario(IdUsuario)
 );
 #Tabla de pagos pendientes
 CREATE TABLE Compra(

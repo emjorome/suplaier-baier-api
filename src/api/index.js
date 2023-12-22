@@ -55,5 +55,5 @@ router.use('/solicitudRegistro', enviarSolicitudesRegistro);
 router.use('/aceptarRegistro', aceptarSolicitudRegistro);
 router.use('/historialOferta',HistorialOferta);
 router.use('/demandas',demandas);
-router.use('./propuestas',propuestas)
+router.use('/propuestas',propuestas)
 module.exports = router;
