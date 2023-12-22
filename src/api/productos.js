@@ -32,7 +32,7 @@ router.post('/',function(req, res){
     req.getConnection((err, conn) =>{
       if (err) return res.send(err);
       conn.query(
-        `INSERT INTO Producto (Descripcion, Activo, FechaCreacion, FechaModificacion, Valoracion, Name, IdCatProducto, IdProveedor, UrlImg) VALUES 
+        `INSERT INTO Producto (Descripcion, Activo, FechaCreacion, FechaModificacion, Valoracion, Name, IdCatProducto, IdUsuario, UrlImg) VALUES 
         ('${Descripcion}', ${Activo}, NOW(), NOW(), ${Valoracion}, '${Name}', ${IdCatProducto}, ${IdProveedor}, '${UrlImg}')`,
         (err, rows) => {
           err ?  console.log(res.json(err)) :res.json("Producto creado exitosamente");
