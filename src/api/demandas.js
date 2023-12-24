@@ -16,15 +16,13 @@ router.get('/', function(req, res, next) {
         AND IdComprador = COALESCE(${IdComprador}, demanda.IdComprador)
         AND IdEstadosOferta = COALESCE(${idEstadosOferta}, demanda.IdEstadosOferta)`, 
         (err, rows) => {
-          if(err) res.json(err);
+          err ? console.log(res.json(err)) : res.json(rows);;
           //mailer.enviarCorreo('kaduran1998@gmail.com', 'tema de prueba', rows[0].Estado.toString());
           // enviarNotificacionTopic({
           //   title: "Oferta ha cambiado", 
           //   message: "Prueba", 
           //   token: "cihtSbtdqjnCsteQQZ10bW:APA91bFvDHZI1y5KR48Lus-zOn-SmAf_P2Plq49jtxxhsu60sQUJiaLm0I7PzPDKAdf43RWbsErONjwm7CJN5Gl6ZgZMJggJpJjXM62Mfoa7FRC_sbpT07JBLM0T_8mquEBWFdiiE-d9"
           // })
-    
-          res.json({rows});
       });
     });
   }else{
@@ -39,8 +37,8 @@ router.get('/', function(req, res, next) {
         AND IdEstadosOferta = COALESCE(${idEstadosOferta}, Oferta.IdEstadosOferta)
         `, [idsArray], 
         (err, rows) => {
-          if(err) res.json(err);
-          res.json({rows});
+          err ? console.log(res.json(err)) : res.json(rows);;
+
       });
     });
   
@@ -51,15 +49,15 @@ router.get('/', function(req, res, next) {
 //IdDemanda, IdProducto, IdComprador, IdEstadosOferta, Minimo, Maximo, PrecioMinimo, PrecioMaximo, Descripcion, ActualProductos, FechaLimite, FechaCreacion, FechaModificacion, Estado
 
 router.post('/', (req, res, next) =>{
-    const {IdProducto, IdComprador, IdEstadosOferta, Minimo, Maximo, PrecioMinimo, PrecioMaximo, Descripcion, ActualProductos, FechaLimite, FechaCreacion, FechaModificacion, Estado} = req.body;
+    const {IdProducto, IdComprador, IdEstadosOferta, Minimo, Maximo, PrecioMinimo, PrecioMaximo, Descripcion, ActualProductos, FechaLimite, Estado} = req.body;
     req.getConnection((err, conn) =>{
       if(err) return res.send(err);
       conn.query(
         `INSERT INTO Demanda (IdProducto, IdComprador, IdEstadosOferta, Minimo, Maximo, PrecioMinimo, PrecioMaximo, Descripcion, ActualProductos, FechaLimite, FechaCreacion, FechaModificacion, Estado) 
           VALUES (${IdProducto},${IdComprador},${IdEstadosOferta},${Minimo}, ${Maximo},${PrecioMinimo}, ${PrecioMaximo}, "${Descripcion}", ${ActualProductos}, "${FechaLimite}", NOW(), NOW(), ${Estado})`, 
         (err, rows) => {
-          if(err) console.log(err);
-          res.json(rows);
+          err ? console.log(res.json(err)) : res.json(rows);;
+          
       });
     });
   });
@@ -74,8 +72,8 @@ router.post('/', (req, res, next) =>{
         SET ofe.ActualProductos = COALESCE(${NuevoActualProductos}, ofe.ActualProductos)
         WHERE ofe.IdDemanda = COALESCE(${IdDemanda}, ofe.IdDemanda)`,
         (err, rows) => {
-          if(err) console.log(err);
-          res.json(rows);
+          err ? console.log(res.json(err)) : res.json(rows);;
+
         }
       )
     })
