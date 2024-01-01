@@ -51,7 +51,7 @@ router.get('/', function(req, res, next) {
 router.post('/', (req, res, next) =>{
     const {IdProducto, IdComprador, IdEstadosOferta, Minimo, Maximo, PrecioMinimo, PrecioMaximo, Descripcion, ActualProductos, FechaLimite, Estado} = req.body;
     req.getConnection((err, conn) =>{
-      if(err) return res.send(err);
+      if(err) {return res.send(err)};
       conn.query(
         `INSERT INTO Demanda (IdProducto, IdComprador, IdEstadosOferta, Minimo, Maximo, PrecioMinimo, PrecioMaximo, Descripcion, ActualProductos, FechaLimite, FechaCreacion, FechaModificacion, Estado) 
           VALUES (${IdProducto},${IdComprador},${IdEstadosOferta},${Minimo}, ${Maximo},${PrecioMinimo}, ${PrecioMaximo}, "${Descripcion}", ${ActualProductos}, "${FechaLimite}", NOW(), NOW(), ${Estado})`, 

@@ -17,3 +17,15 @@ SET IdEstadosOferta = (SELECT IdEstadosOferta FROM EstadosOferta es WHERE Descri
 WHERE IdEstadosOferta = (SELECT IdEstadosOferta FROM EstadosOferta es WHERE Descripcion = 'En curso')
 AND DATE(FechaLimite) <= DATE(CURDATE())
 AND ActualProductos > Minimo;
+
+UPDATE DEMANDA
+SET IdEstadosOferta = (SELECT IdEstadosOferta FROM EstadosOferta es WHERE Descripcion = 'Por confirmar cierre')
+WHERE IdEstadosOferta = (SELECT IdEstadosOferta FROM EstadosOferta es WHERE Descripcion = 'En curso')
+AND DATE(FechaLimite) <= DATE(CURDATE())
+AND ActualProductos < Minimo;
+
+UPDATE DEMANDA 
+SET IdEstadosOferta = (SELECT IdEstadosOferta FROM EstadosOferta es WHERE Descripcion = 'Verificacion de pagos')
+WHERE IdEstadosOferta = (SELECT IdEstadosOferta FROM EstadosOferta es WHERE Descripcion = 'En curso')
+AND DATE(FechaLimite) <= DATE(CURDATE())
+AND ActualProductos > Minimo;

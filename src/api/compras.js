@@ -32,7 +32,7 @@ router.get('/estaUnido', function(req, res, next) {
     if(err) return res.send(err);
     conn.query(
       `SELECT COUNT (*) FROM Compra c WHERE c.IdComprador = COALESCE(${idComprador}, c.IdComprador)
-      AND c.IdOferta = COALESCE(${idOferta}, c.IdOferta)
+      AND c.IdOferta = COALESCE(${idOferta}, c.IdOferta) AND c.TipoCompra="normal"
       `, 
       (err, rows) => {
         err? res.json(err) :  res.json({rows});
@@ -45,12 +45,12 @@ router.get('/estaUnido', function(req, res, next) {
 
 
 router.post('/', (req, res, next) =>{
-  const {IdProveedor, IdComprador, IdOferta, Cantidad, Total, Descripcion, Observacion, IdEstado, MetodoPago, PagadoAProveedor} = req.body;
+  const {IdProveedor, IdComprador, IdOferta, Cantidad, Total, Descripcion, Observacion, IdEstado, MetodoPago, PagadoAProveedor, TipoCompra} = req.body;
   req.getConnection((err, conn) =>{
     if(err) return res.send(err);
     conn.query(
-      `INSERT INTO Compra (IdProveedor, IdComprador, IdOferta, Cantidad, Total, Descripcion, Observacion, Fecha, IdEstado, MetodoPago, PagadoAProveedor) 
-        VALUES (${IdProveedor},${IdComprador},${IdOferta},${Cantidad}, ${Total}, "${Descripcion}", "${Observacion}", NOW(), ${IdEstado}, "${MetodoPago}", ${PagadoAProveedor})`, 
+      `INSERT INTO Compra (IdProveedor, IdComprador, IdOferta, Cantidad, Total, Descripcion, Observacion, Fecha, IdEstado, MetodoPago, PagadoAProveedor, TipoCompra) 
+        VALUES (${IdProveedor},${IdComprador},${IdOferta},${Cantidad}, ${Total}, "${Descripcion}", "${Observacion}", NOW(), ${IdEstado}, "${MetodoPago}", ${PagadoAProveedor}, "${TipoCompra}")`, 
       (err, rows) => {
         err? res.json(err) :  res.json({rows});
 

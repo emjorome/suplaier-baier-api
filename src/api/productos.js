@@ -23,6 +23,23 @@ router.get('/', function(req, res, next) {
   });
 });
 
+router.get('/onlyNames', function(req, res, next) {
+  const id = req.query.id === undefined ? null : req.query.id;
+  const idProveedor = req.query.idProveedor === undefined ? null : req.query.idProveedor;
+
+  req.getConnection((err, conn) =>{
+    if(err) return res.send(err);
+    conn.query(
+      `SELECT IdProducto, Name FROM Producto p 
+        WHERE IdProducto = COALESCE(${id}, p.IdProducto) 
+        AND IdProveedor = COALESCE(${idProveedor}, p.IdProveedor)`, 
+      (err, rows) => {
+        err? res.json(err) :  res.json({rows});
+
+    });
+  });
+});
+
 
 // joseking5@hotmail.com
 // Leonardo01!
