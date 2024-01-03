@@ -12,7 +12,36 @@ USE DbContabilly;
 -- 	Ciudad VARCHAR(50),
 -- 	Direccion VARCHAR(200)
 -- );
+CREATE TABLE IF NOT EXISTS Demanda( 
+	IdDemanda INT AUTO_INCREMENT PRIMARY KEY,
+	IdProducto INT ,
+    IdComprador INT,
+    IdEstadosOferta INT,
+	Minimo INT,
+	Maximo INT,
+    PrecioMinimo INT,
+    PrecioMaximo INT,
+	Descripcion VARCHAR(500),
+	ActualProductos INT,
+	FechaLimite DATETIME,
+	FechaCreacion DATETIME,
+	FechaModificacion DATETIME,
+	Estado BOOL,
+    FOREIGN KEY (IdComprador) REFERENCES Usuario(IdUsuario),
+	FOREIGN KEY (IdProducto) REFERENCES Producto(IdProducto),
+    FOREIGN KEY (IdEstadosOferta) REFERENCES EstadosOferta(IdEstadosOferta)
+);
 
+CREATE TABLE IF NOT EXISTS Propuesta( 
+	IdPropuesta INT AUTO_INCREMENT PRIMARY KEY,
+	IdDemanda INT,
+    IdProveedor INT,
+    Precio INT,
+    Cantidad INT,
+	Estado ENUM('pendiente', 'aprobada', 'rechazada') DEFAULT 'pendiente',
+    FOREIGN KEY (IdDemanda) REFERENCES Demanda(IdDemanda),
+	FOREIGN KEY (IdProveedor) REFERENCES Usuario(IdUsuario)
+);
 CREATE TABLE IF NOT EXISTS CatProducto(
 	IdCatProducto INT AUTO_INCREMENT PRIMARY KEY,
     Nombre VARCHAR(50),
