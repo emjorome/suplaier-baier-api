@@ -16,7 +16,7 @@ router.get('/', function(req, res, next) {
         AND IdComprador = COALESCE(${IdComprador}, demanda.IdComprador)
         AND IdEstadosOferta = COALESCE(${idEstadosOferta}, demanda.IdEstadosOferta)`, 
         (err, rows) => {
-          err ? console.log(res.json(err)) : res.json(rows);;
+          err ? console.log(res.json(err)) : res.json({rows});;
           //mailer.enviarCorreo('kaduran1998@gmail.com', 'tema de prueba', rows[0].Estado.toString());
           // enviarNotificacionTopic({
           //   title: "Oferta ha cambiado", 
