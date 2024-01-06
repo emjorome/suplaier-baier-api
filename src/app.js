@@ -4,6 +4,8 @@ const helmet = require("helmet");
 const cors = require("cors");
 const mysql = require("mysql2");
 const myconn = require("express-myconnection");
+const bodyParser = require('body-parser');
+
 require("dotenv").config();
 /*const dbOptions = {
   host: process.env.HOST,
@@ -27,6 +29,7 @@ const mailer = require("./mailer");
 const firebaseMessagging = require("./firebaseMesagging");
 const app = express();
 
+app.use(bodyParser.json({ limit: '25mb' }));
 app.use(morgan("dev"));
 app.use(helmet());
 app.use(cors());

@@ -90,6 +90,8 @@ CREATE TABLE IF NOT EXISTS Producto (
     FOREIGN KEY (IdProveedor) REFERENCES Usuario(IdUsuario),
     FOREIGN KEY (IdCatProducto) REFERENCES CatProducto(IdCatProducto)
 );
+ALTER TABLE producto
+MODIFY COLUMN UrlImg LONGTEXT;
                         
 -- CREATE TABLE IF NOT EXISTS Comprador (
 -- 	IdComprador INT AUTO_INCREMENT PRIMARY KEY,
