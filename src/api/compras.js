@@ -45,16 +45,27 @@ router.get('/estaUnido', function(req, res, next) {
 
 
 router.post('/', (req, res, next) =>{
-  const {IdProveedor, IdComprador, IdOferta, Cantidad, Total, Descripcion, Observacion, IdEstado, MetodoPago, PagadoAProveedor, TipoCompra} = req.body;
+  const {IdProveedor, IdComprador, IdOferta, Cantidad, Total, Descripcion, Observacion, IdEstado, MetodoPago, PagadoAProveedor, TipoCompra, IdDemanda} = req.body;
   req.getConnection((err, conn) =>{
     if(err) return res.send(err);
+    if(IdOferta){
+
     conn.query(
       `INSERT INTO Compra (IdProveedor, IdComprador, IdOferta, Cantidad, Total, Descripcion, Observacion, Fecha, IdEstado, MetodoPago, PagadoAProveedor, TipoCompra) 
         VALUES (${IdProveedor},${IdComprador},${IdOferta},${Cantidad}, ${Total}, "${Descripcion}", "${Observacion}", NOW(), ${IdEstado}, "${MetodoPago}", ${PagadoAProveedor}, "${TipoCompra}")`, 
       (err, rows) => {
         err? res.json(err) :  res.json({rows});
 
+    });         
+  }else if(IdDemanda){
+    conn.query(
+      `INSERT INTO Compra (IdProveedor, IdComprador, IdDemanda, Cantidad, Total, Descripcion, Observacion, Fecha, IdEstado, MetodoPago, PagadoAProveedor, TipoCompra) 
+        VALUES (${IdProveedor},${IdComprador},${IdDemanda},${Cantidad}, ${Total}, "${Descripcion}", "${Observacion}", NOW(), ${IdEstado}, "${MetodoPago}", ${PagadoAProveedor}, "${TipoCompra}")`, 
+      (err, rows) => {
+        err? res.json(err) :  res.json({rows});
+
     });
+  }
   });
 });
 

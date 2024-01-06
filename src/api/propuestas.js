@@ -25,8 +25,8 @@ router.post('/',function(req, res){
     req.getConnection((err, conn) =>{
       if (err) return res.send(err);
       conn.query(
-        `INSERT INTO propuesta (IdDemanda, IdProveedor, Precio, Cantidad, Estado) VALUES 
-        (${IdDemanda}, '${IdProveedor}', '${Precio}', '${Cantidad}','${Estado}' )`,
+        `INSERT INTO propuesta (IdDemanda, IdProveedor, Precio, Cantidad, Estado, FechaPropuesta) VALUES 
+        (${IdDemanda}, '${IdProveedor}', '${Precio}', '${Cantidad}','${Estado}', NOW() )`,
         (err, rows) => {
           err ? res.json(err):  res.json("Propuesta Enviada Exitosamente");      
         }

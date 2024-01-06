@@ -162,6 +162,8 @@ CREATE TABLE IF NOT EXISTS Propuesta(
     FOREIGN KEY (IdDemanda) REFERENCES Demanda(IdDemanda),
 	FOREIGN KEY (IdProveedor) REFERENCES Usuario(IdUsuario)
 );
+ALTER TABLE Propuesta
+ADD FechaPropuesta DATETIME,
 
 #Tabla de pagos pendientes
 CREATE TABLE Compra(
@@ -186,6 +188,8 @@ CREATE TABLE Compra(
 );
 ALTER TABLE Compra
 ADD TipoCompra ENUM('instantanea', 'normal') DEFAULT 'normal';
+ALTER TABLE Compra
+ADD IdDemanda INT;
 
 
 CREATE TABLE IF NOT EXISTS Notificacion (
