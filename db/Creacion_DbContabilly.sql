@@ -163,7 +163,7 @@ CREATE TABLE IF NOT EXISTS Propuesta(
 	FOREIGN KEY (IdProveedor) REFERENCES Usuario(IdUsuario)
 );
 ALTER TABLE Propuesta
-ADD FechaPropuesta DATETIME,
+ADD FechaPropuesta DATETIME;
 
 #Tabla de pagos pendientes
 CREATE TABLE Compra(
