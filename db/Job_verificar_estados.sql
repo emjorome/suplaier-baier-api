@@ -1,6 +1,5 @@
 use dbcontabilly;
 -- SET GLOBAL event_scheduler = ON; ?
-SELECT * from blog where id=2;-- and private=0 LIMIT 1;
 
 CREATE EVENT `verificar_estados` 
 ON SCHEDULE EVERY 1 DAY STARTS '2022-08-11 00:00:00'
