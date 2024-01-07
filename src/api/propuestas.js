@@ -9,17 +9,35 @@ var router = express.Router();
 	Estado*/
 
   router.get('/', function(req, res, next) {
-    const id = req.query.id === undefined ? null : req.query.id;
-    req.getConnection((err, conn) =>{
+    const idPropuesta = req.query.id;
+    const idDemanda = req.query.idDemanda;
+    const estado = req.query.estado || 'pendiente';
+
+    req.getConnection((err, conn) => {
       if(err) return res.send(err);
-      conn.query(
-        `SELECT * FROM propuesta WHERE IdPropuesta = COALESCE(${id}, propuesta.IdPropuesta) AND propuesta.Estado='pendiente'`, 
-        (err, rows) => {
-          err? res.json(err) :  res.json({rows});
+
+      let query = 'SELECT * FROM propuesta WHERE Estado = ?';
+      let queryParams = [estado];
+
+      if (idPropuesta) {
+        query += ' AND IdPropuesta = ?';
+        queryParams.push(idPropuesta);
+      }
+
+      if (idDemanda) {
+        query += ' AND IdDemanda = ?';
+        queryParams.push(idDemanda);
+      }
+
+      conn.query(query, queryParams, (err, rows) => {
+        if(err) {
+          res.json(err);
+        } else {
+          res.json({rows});
+        }
       });
     });
-  });
-
+});
 router.post('/',function(req, res){
     const { IdDemanda, IdProveedor, Precio, Cantidad, Estado } = req.body;
     req.getConnection((err, conn) =>{
@@ -36,13 +54,13 @@ router.post('/',function(req, res){
 
 
 router.patch('/', (req, res, next) => {
-  const {IdSolicitud, Estado} = req.body;
+  const {IdPropuesta, Estado} = req.body;
   req.getConnection((err, conn) => {
     if(err) return res.send(err);
     conn.query(
       `UPDATE propuesta 
       SET Estado = '${Estado}'
-      WHERE IdSolicitud =${IdSolicitud}`,
+      WHERE IdPropuesta =${IdPropuesta}`,
       (err, rows) => {
         err ? console.log(err) : res.json(rows);
       }
