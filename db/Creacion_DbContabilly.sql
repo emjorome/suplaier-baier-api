@@ -1,4 +1,6 @@
+drop database DbContabilly;
 CREATE DATABASE IF NOT EXISTS DbContabilly;
+
 USE DbContabilly;
 -- CREATE TABLE IF NOT EXISTS Proveedor (
 -- 	IdProveedor INT AUTO_INCREMENT PRIMARY KEY,
@@ -47,6 +49,11 @@ ADD Ruc VARCHAR(15);
 ALTER TABLE Usuario
 ADD FirebaseToken VARCHAR(200);
 
+ALTER TABLE Usuario
+ADD COLUMN codigo_invitacion VARCHAR(12) UNIQUE,
+ADD COLUMN invitado_por_id INT NULL,
+ADD COLUMN estrellas_acumuladas INT NOT NULL DEFAULT 0,
+ADD CONSTRAINT fk_invitado_por FOREIGN KEY (invitado_por_id) REFERENCES Usuario(IdUsuario);
 
 -- ALTER TABLE Usuario
 -- DROP COLUMN FirebaseToken;
@@ -192,6 +199,8 @@ ALTER TABLE Compra
 ADD TipoCompra ENUM('instantanea', 'normal') DEFAULT 'normal';
 ALTER TABLE Compra
 ADD IdDemanda INT;
+ALTER TABLE Compra
+ADD descuento INT DEFAULT 0;
 
 
 CREATE TABLE IF NOT EXISTS Notificacion (
@@ -372,4 +381,28 @@ CREATE TABLE IF NOT EXISTS TokenDispositivo (
     FOREIGN KEY (IdUsuario) REFERENCES Usuario(IdUsuario)
 );
 
+CREATE TABLE IF NOT EXISTS registro_invitaciones (
+    IdRegistroInvitacion INT AUTO_INCREMENT PRIMARY KEY,
+    IdInvitador INT,
+    IdInvitado INT,
+    FechaRegistro DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (IdInvitador) REFERENCES Usuario(IdUsuario),
+    FOREIGN KEY (IdInvitado) REFERENCES Usuario(IdUsuario)
+);
+
+CREATE TABLE IF NOT EXISTS niveles_recompensa (
+    IdNivelRecompensa INT AUTO_INCREMENT PRIMARY KEY,
+    UmbralMinInvitados INT NOT NULL,
+    EstrellasPorInvitado INT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS historial_canjes (
+    IdCanje INT AUTO_INCREMENT PRIMARY KEY,
+    IdCompra INT,
+    IdUsuario INT,
+    EstrellasGastadas INT NOT NULL,
+    FechaCanje DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (IdUsuario) REFERENCES Usuario(IdUsuario),
+    FOREIGN KEY (IdCompra) REFERENCES Compra(IdCompra)
+);
                         
