@@ -24,7 +24,9 @@ const enviarSolicitudesRegistro = require('./solicitudRegistro');
 const aceptarSolicitudRegistro = require('./aceptarRegistro');
 const HistorialOferta = require('./historialOferta');
 const demandas = require('./demandas');
-const propuestas = require('./propuestas')
+const propuestas = require('./propuestas');
+const umbral = require('./umbralRecompensas');
+const reporteInvitaciones = require('./reporteInvitaciones');
 const router = express.Router();
 
 /**
@@ -77,5 +79,7 @@ router.use('/aceptarRegistro', aceptarSolicitudRegistro);
 router.use('/historialOferta',HistorialOferta);
 router.use('/demandas',demandas);
 router.use('/recompensas', recompensas);  
-router.use('/propuestas',propuestas)
+router.use('/propuestas',propuestas);
+router.use('/umbralRecompensas', umbral);
+router.use('/reporteInvitaciones', reporteInvitaciones);
 module.exports = router;

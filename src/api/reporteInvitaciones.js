@@ -8,6 +8,59 @@ const router = express.Router();
  *  - su código de invitación
  *  - lista de usuarios que usaron su código
  */
+/**
+ * @swagger
+ * /reporteInvitaciones/{idUsuario}:
+ *   get:
+ *     summary: Obtener reporte de invitados de un usuario
+ *     description: Retorna la información del usuario dueño del código y una lista de todos los usuarios que se registraron usando ese código.
+ *     tags:
+ *       - Reportes
+ *     parameters:
+ *       - in: path
+ *         name: idUsuario
+ *         required: true
+ *         description: El ID del usuario del cual se quiere ver el reporte de invitaciones.
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       '200':
+ *         description: Reporte generado exitosamente.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 ok:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: object
+ *                   nullable: true
+ *                   properties:
+ *                     IdUsuario:
+ *                       type: integer
+ *                     Nombre:
+ *                       type: string
+ *                     CodigoInvitacion:
+ *                       type: string
+ *                     Invitados:
+ *                       type: array
+ *                       description: Lista de usuarios que usaron el código.
+ *                       items:
+ *                         type: object
+ *                         properties:
+ *                           IdInvitado:
+ *                             type: integer
+ *                           Nombre:
+ *                             type: string
+ *                           Email:
+ *                             type: string
+ *       '400':
+ *         description: Falta el parámetro idUsuario.
+ *       '500':
+ *         description: Error interno del servidor o de base de datos.
+ */
 router.get('/:idUsuario', (req, res) => {
   const idUsuario = req.params.idUsuario;
 
