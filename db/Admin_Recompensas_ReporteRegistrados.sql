@@ -8,29 +8,29 @@ USE DbContabilly;
 
 -- ============================================================================
 -- 1) TABLA NivelRecompensa
---    Cada fila es un nivel:
---    - UmbralMinInvitados: desde cuántos invitados aplica ese nivel
---    - EstrellasPorInvitado: cuántas estrellas gana por cada invitado
---    Ej:
---      Nivel 1: UmbralMinInvitados = 0,   EstrellasPorInvitado = 50
---      Nivel 2: UmbralMinInvitados = 70,  EstrellasPorInvitado = 20
 -- ============================================================================
 
 CREATE TABLE IF NOT EXISTS NivelRecompensa (
-  IdNivelRecompensa   INT AUTO_INCREMENT PRIMARY KEY,
-  UmbralMinInvitados  INT NOT NULL,
+  IdNivelRecompensa    INT AUTO_INCREMENT PRIMARY KEY,
+  UmbralMinInvitados   INT NOT NULL,
   EstrellasPorInvitado INT NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- Asegurar que exista al menos el nivel 1 (DEFAULT)
+INSERT INTO NivelRecompensa (IdNivelRecompensa, UmbralMinInvitados, EstrellasPorInvitado)
+VALUES (1, 0, 50)
+ON DUPLICATE KEY UPDATE IdNivelRecompensa = IdNivelRecompensa;
+
 -- ============================================================================
--- 2) Modificar USUARIO para manejar:
---    - estrellas_acumuladas (por si aún no existe)
---    - IdNivelRecompensa (nivel asignado por el admin)
+-- 2) Modificar USUARIO:
+--    - estrellas_acumuladas
+--    - IdNivelRecompensa (DEFAULT 1)
 -- ============================================================================
 
 -- Asegurar columna estrellas_acumuladas
 SET @existe_estrellas := (
-  SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS
+  SELECT COUNT(*)
+  FROM INFORMATION_SCHEMA.COLUMNS
   WHERE TABLE_SCHEMA = DATABASE()
     AND TABLE_NAME   = 'Usuario'
     AND COLUMN_NAME  = 'estrellas_acumuladas'
@@ -45,9 +45,10 @@ PREPARE stmt FROM @sql_estrellas;
 EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
 
--- Asegurar columna IdNivelRecompensa
+-- Asegurar columna IdNivelRecompensa con DEFAULT 1 (dejándola NULLable)
 SET @existe_nivel := (
-  SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS
+  SELECT COUNT(*)
+  FROM INFORMATION_SCHEMA.COLUMNS
   WHERE TABLE_SCHEMA = DATABASE()
     AND TABLE_NAME   = 'Usuario'
     AND COLUMN_NAME  = 'IdNivelRecompensa'
@@ -55,12 +56,17 @@ SET @existe_nivel := (
 
 SET @sql_nivel := IF(
   @existe_nivel = 0,
-  'ALTER TABLE Usuario ADD COLUMN IdNivelRecompensa INT NULL',
-  'SELECT "ok"'
+  'ALTER TABLE Usuario ADD COLUMN IdNivelRecompensa INT NULL DEFAULT 1',
+  'ALTER TABLE Usuario MODIFY COLUMN IdNivelRecompensa INT NULL DEFAULT 1'
 );
 PREPARE stmt2 FROM @sql_nivel;
 EXECUTE stmt2;
 DEALLOCATE PREPARE stmt2;
+
+-- Poner en 1 cualquier usuario que tenga NULL
+UPDATE Usuario
+SET IdNivelRecompensa = 1
+WHERE IdNivelRecompensa IS NULL;
 
 -- Asegurar FK Usuario -> NivelRecompensa
 SET @existe_fk_nivel := (
@@ -85,8 +91,6 @@ DEALLOCATE PREPARE stmt3;
 
 -- ============================================================================
 -- 3) PROCEDURE CanjearCodigoInvitacion
---    - Registra el canje en InvitacionCanje
---    - Suma estrellas al usuario (estrellas_acumuladas)
 -- ============================================================================
 
 DELIMITER $$
@@ -100,7 +104,6 @@ CREATE PROCEDURE CanjearCodigoInvitacion(
 BEGIN
   DECLARE dup TINYINT DEFAULT 0;
 
-  -- Si hay violación de UNIQUE (IdUsuario, Codigo), se marca dup = 1
   DECLARE CONTINUE HANDLER FOR 1062 SET dup = 1;
 
   INSERT INTO InvitacionCanje (IdUsuario, Codigo, Estrellas)
@@ -110,13 +113,11 @@ BEGIN
     SIGNAL SQLSTATE '45000'
       SET MESSAGE_TEXT = 'Este código ya fue canjeado por este usuario.';
   ELSE
-    -- Sumar estrellas al usuario sólo si el canje fue válido
     UPDATE Usuario
     SET estrellas_acumuladas = estrellas_acumuladas + p_Estrellas
     WHERE IdUsuario = p_IdUsuario;
   END IF;
 
-  -- Devolver info del usuario para que el front muestre el total actualizado
   SELECT u.IdUsuario,
          u.Nombre,
          u.estrellas_acumuladas
@@ -126,7 +127,6 @@ END$$
 
 -- ============================================================================
 -- 4) PROCEDURE AsignarNivelRecompensa
---    El ADMIN asigna el nivel de recompensa al comprador
 -- ============================================================================
 
 DROP PROCEDURE IF EXISTS AsignarNivelRecompensa$$
@@ -138,13 +138,17 @@ CREATE PROCEDURE AsignarNivelRecompensa(
 BEGIN
   DECLARE v_esAdmin INT;
 
-  -- Verificar que quien ejecuta sea admin (Rol = 'ADMIN')
+  -- Acepta 'ADMIN', 'ADMINISTRADOR' o cualquier rol que empiece por 'admin'
   SELECT COUNT(*)
   INTO v_esAdmin
   FROM Usuario u
   INNER JOIN Rol r ON u.IdRol = r.IdRol
   WHERE u.IdUsuario = p_IdAdmin
-    AND UPPER(r.Rol) = 'ADMIN';
+    AND (
+         UPPER(r.Rol) = 'ADMIN'
+         OR UPPER(r.Rol) = 'ADMINISTRADOR'
+         OR UPPER(r.Rol) LIKE 'ADMIN%'
+        );
 
   IF v_esAdmin = 0 THEN
     SIGNAL SQLSTATE '45000'
@@ -154,7 +158,6 @@ BEGIN
     SET IdNivelRecompensa = p_IdNivelRecompensa
     WHERE IdUsuario = p_IdUsuarioObjetivo;
 
-    -- Devolver la info actualizada del comprador + datos del nivel
     SELECT u.IdUsuario,
            u.Nombre,
            u.Email,
@@ -171,10 +174,8 @@ END$$
 
 -- ============================================================================
 -- 5) VISTA Y REPORTE DE USUARIOS REGISTRADOS
---    Para que el admin pueda generar el "reporte de registrados"
 -- ============================================================================
 
--- Vista base con la info que suele pedirse en el reporte
 DROP VIEW IF EXISTS vw_UsuariosRegistrados$$
 CREATE VIEW vw_UsuariosRegistrados AS
 SELECT 
@@ -197,7 +198,6 @@ FROM Usuario u
 LEFT JOIN NivelRecompensa n
        ON u.IdNivelRecompensa = n.IdNivelRecompensa$$
 
--- Procedure para obtener el reporte 
 DROP PROCEDURE IF EXISTS ReporteUsuariosRegistrados$$
 CREATE PROCEDURE ReporteUsuariosRegistrados(
   IN p_Pais              VARCHAR(50),
