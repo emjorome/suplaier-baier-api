@@ -98,5 +98,77 @@ router.get('/saldo/:userId', (req, res) => {
   });
 });
 
+/**
+ * GET /api/v1/recompensas/reporte-invitaciones/:userId
+ * Obtiene el código de invitación del comprador y la lista de usuarios que lo han usado
+ */
+router.get('/reporte-invitaciones/:userId', (req, res) => {
+  const userId = req.params.userId;
+  console.log('[REPORTE] Solicitando reporte para userId:', userId);
+  
+  if (!userId) return res.status(400).json({ ok: false, message: 'Falta userId' });
+
+  req.getConnection((err, conn) => {
+    if (err) {
+      console.error('[REPORTE] Error de conexión DB:', err);
+      return res.status(500).json({ ok: false, message: 'DB connect error' });
+    }
+    
+    // Primero obtenemos el código de invitación del comprador
+    conn.query(
+      'SELECT codigo_invitacion, Nombre FROM Usuario WHERE IdUsuario = ?',
+      [userId],
+      (e, userRows) => {
+        if (e) {
+          console.error('[REPORTE] Error query usuario:', e);
+          return res.status(500).json({ ok: false, message: 'Query error: ' + e.message });
+        }
+        if (!userRows || userRows.length === 0) {
+          console.log('[REPORTE] Usuario no encontrado:', userId);
+          return res.status(404).json({ ok: false, message: 'Usuario no encontrado' });
+        }
+        
+        const codigoInvitacion = userRows[0].codigo_invitacion;
+        const nombreComprador = userRows[0].Nombre;
+        console.log('[REPORTE] Usuario encontrado:', nombreComprador, 'Código:', codigoInvitacion);
+        
+        // Ahora obtenemos todos los usuarios que fueron invitados por este comprador
+        conn.query(
+          `SELECT 
+            u.IdUsuario,
+            u.Nombre,
+            u.Email,
+            u.Identificacion,
+            u.Pais,
+            u.Ciudad
+          FROM Usuario u
+          WHERE u.invitado_por_id = ?
+          ORDER BY u.IdUsuario DESC`,
+          [userId],
+          (e2, invitadosRows) => {
+            if (e2) {
+              console.error('[REPORTE] Error query invitados:', e2);
+              return res.status(500).json({ ok: false, message: 'Query error al obtener invitados: ' + e2.message });
+            }
+            
+            console.log('[REPORTE] Invitados encontrados:', invitadosRows ? invitadosRows.length : 0);
+            
+            return res.json({
+              ok: true,
+              comprador: {
+                id: userId,
+                nombre: nombreComprador,
+                codigoInvitacion: codigoInvitacion
+              },
+              invitados: invitadosRows || [],
+              totalInvitados: invitadosRows ? invitadosRows.length : 0
+            });
+          }
+        );
+      }
+    );
+  });
+});
+
 
 module.exports = router;
