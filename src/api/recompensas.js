@@ -116,7 +116,7 @@ router.get('/reporte-invitaciones/:userId', (req, res) => {
     
     // Primero obtenemos el código de invitación del comprador
     conn.query(
-      'SELECT codigo_invitacion, Nombre FROM Usuario WHERE IdUsuario = ?',
+      'SELECT codigo_invitacion, Nombre, Identificacion FROM Usuario WHERE IdUsuario = ?',
       [userId],
       (e, userRows) => {
         if (e) {
@@ -128,8 +128,34 @@ router.get('/reporte-invitaciones/:userId', (req, res) => {
           return res.status(404).json({ ok: false, message: 'Usuario no encontrado' });
         }
         
-        const codigoInvitacion = userRows[0].codigo_invitacion;
+        let codigoInvitacion = userRows[0].codigo_invitacion;
         const nombreComprador = userRows[0].Nombre;
+        const identificacion = userRows[0].Identificacion;
+        
+        // Si no tiene código de invitación, generamos uno
+        if (!codigoInvitacion) {
+          const nombreCompleto = nombreComprador || '';
+          const partesNombre = nombreCompleto.trim().split(/\s+/);
+          const primerNombre = partesNombre[0] || '';
+          const apellido = partesNombre.length > 1 ? partesNombre[partesNombre.length - 1] : '';
+          
+          // Generar código: primera letra del nombre + apellido + identificación
+          codigoInvitacion = `${primerNombre.charAt(0).toLowerCase()}${apellido.toLowerCase()}${identificacion}`;
+          
+          // Actualizar en la base de datos
+          conn.query(
+            'UPDATE Usuario SET codigo_invitacion = ? WHERE IdUsuario = ?',
+            [codigoInvitacion, userId],
+            (errUpdate) => {
+              if (errUpdate) {
+                console.error('[REPORTE] Error al actualizar código:', errUpdate);
+              } else {
+                console.log('[REPORTE] Código generado y guardado:', codigoInvitacion);
+              }
+            }
+          );
+        }
+        
         console.log('[REPORTE] Usuario encontrado:', nombreComprador, 'Código:', codigoInvitacion);
         
         // Ahora obtenemos todos los usuarios que fueron invitados por este comprador
