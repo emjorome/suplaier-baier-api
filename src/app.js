@@ -118,6 +118,10 @@ const options = {
       {
         name: 'Usuarios',
         description: 'Endpoints para la gestión de usuarios (CRUD).'
+      },
+      {
+        name: 'Recompensas',
+        description: 'Endpoints para la gestión de umbrales y asignación de niveles de recompensa.'
       }
     ]      
   },
