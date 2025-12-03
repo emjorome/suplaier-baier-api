@@ -6,6 +6,66 @@ const router = express.Router();
  * POST /api/v1/recompensas/canjear-invitacion
  * Body: { userId: number, code: string }
  */
+/**
+ * @swagger
+ * /recompensas/canjear-invitacion:
+ *   post:
+ *     summary: Canjear un código de invitación
+ *     description: Permite a un usuario canjear un código de invitación para recibir una recompensa. Llama al procedimiento almacenado `CanjearCodigoInvitacion`.
+ *     tags:
+ *       - Recompensas
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - userId
+ *               - code
+ *             properties:
+ *               userId:
+ *                 type: integer
+ *                 description: ID del usuario que canjea el código.
+ *                 example: 10
+ *               code:
+ *                 type: string
+ *                 description: Código de invitación.
+ *                 example: "PROMO2025"
+ *     responses:
+ *       200:
+ *         description: Proceso de canje completado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 ok:
+ *                   type: boolean
+ *                 alreadyClaimed:
+ *                   type: boolean
+ *                   description: Indica si el código ya había sido canjeado por este usuario.
+ *                 award:
+ *                   type: object
+ *                   properties:
+ *                     type:
+ *                       type: string
+ *                       example: "invite"
+ *                     stars:
+ *                       type: integer
+ *                       example: 100
+ *                     message:
+ *                       type: string
+ *                       example: "Obtuviste 100 Estrellas gracias a tu código de invitación"
+ *                 balance:
+ *                   type: integer
+ *                   description: Saldo total actualizado.
+ *                   example: 500
+ *       400:
+ *         description: Error de validación.
+ *       500:
+ *         description: Error interno del servidor.
+ */
 router.post('/canjear-invitacion', (req, res) => {
   const { userId, code } = req.body || {};
   if (!userId || !code) {
@@ -79,6 +139,41 @@ router.post('/canjear-invitacion', (req, res) => {
 
 /**
  * GET /api/v1/recompensas/saldo?userId=123
+ */
+/**
+ * @swagger
+ * /recompensas/saldo/{userId}:
+ *   get:
+ *     summary: Consultar saldo de estrellas
+ *     description: Devuelve el saldo actual de estrellas acumuladas por un usuario.
+ *     tags:
+ *       - Recompensas
+ *     parameters:
+ *       - in: path
+ *         name: userId
+ *         required: true
+ *         description: ID del usuario.
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Saldo obtenido correctamente.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 ok:
+ *                   type: boolean
+ *                   example: true
+ *                 balance:
+ *                   type: integer
+ *                   description: Estrellas acumuladas.
+ *                   example: 1250
+ *       400:
+ *         description: Falta el parámetro userId.
+ *       500:
+ *         description: Error interno del servidor.
  */
 router.get('/saldo/:userId', (req, res) => {
   const userId = req.params.userId;

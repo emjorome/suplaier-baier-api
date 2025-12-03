@@ -121,7 +121,7 @@ const options = {
       },
       {
         name: 'Recompensas',
-        description: 'Endpoints para la gestión de umbrales y asignación de niveles de recompensa.'
+        description: 'Endpoints para la gestión de umbrales, recompensas y asignación de niveles de recompensa.'
       }
     ]      
   },
