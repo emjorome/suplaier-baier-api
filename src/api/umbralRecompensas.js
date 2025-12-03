@@ -299,7 +299,7 @@ router.put('/asignar-nivel', (req, res) => {
           if (e.errno === 1644) {
             return res.status(400).json({ ok: false, message: e.sqlMessage });
           }
-          return res.status(500).json({ ok: false, message: 'SP error' });
+          return res.status(500).json({ ok: false, message: e.sqlMessage });
         }
 
         return res.json({
