@@ -285,11 +285,95 @@ router.get('/reporte-invitaciones/:userId', (req, res) => {
               totalInvitados: invitadosRows ? invitadosRows.length : 0
             });
           }
-        );
+    )}
+)});
+  });
+
+/**
+ * GET /api/v1/recompensas/canjes
+ * Obtiene la lista de opciones de descuento ordenadas por costo (ascendente)
+ */
+/**
+ * @swagger
+ * /recompensas/canjes:
+ *   get:
+ *     summary: Obtener opciones de descuento disponibles
+ *     description: Retorna la lista de opciones de descuento ordenadas por costo de estrellas (ascendente). Útil para que el frontend muestre los descuentos disponibles al usuario.
+ *     tags:
+ *       - Recompensas
+ *     responses:
+ *       200:
+ *         description: Lista de opciones de descuento obtenida correctamente.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 ok:
+ *                   type: boolean
+ *                   example: true
+ *                 canjes:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       IdOpcion:
+ *                         type: integer
+ *                         example: 1
+ *                       Nombre:
+ *                         type: string
+ *                         example: "Bronce"
+ *                       CostoEstrellas:
+ *                         type: integer
+ *                         description: Cantidad de estrellas necesarias para este descuento
+ *                         example: 100
+ *                       Porcentaje:
+ *                         type: number
+ *                         format: float
+ *                         description: Porcentaje de descuento aplicado
+ *                         example: 5.00
+ *                       Activo:
+ *                         type: boolean
+ *                         example: true
+ *                       FechaCreacion:
+ *                         type: string
+ *                         format: date-time
+ *                         example: "2025-12-06T10:30:00"
+ *       500:
+ *         description: Error interno del servidor.
+ */
+router.get('/canjes', (req, res) => {
+  req.getConnection((err, conn) => {
+    if (err) {
+      console.error('[CANJES] Error de conexión DB:', err);
+      return res.status(500).json({ ok: false, message: 'DB connect error' });
+    }
+
+    // Consultar opciones de descuento activas, ordenadas por costo (ascendente)
+    conn.query(
+      `SELECT 
+        IdOpcion,
+        Nombre,
+        CostoEstrellas,
+        Porcentaje,
+        Activo,
+        FechaCreacion
+      FROM opciones_descuento
+      WHERE Activo = TRUE
+      ORDER BY CostoEstrellas ASC`,
+      (e, rows) => {
+        if (e) {
+          console.error('[CANJES] Error en query:', e);
+          return res.status(500).json({ ok: false, message: 'Query error: ' + e.message });
+        }
+
+        return res.json({
+          ok: true,
+          canjes: rows || []
+        });
       }
     );
   });
 });
-
 
 module.exports = router;
