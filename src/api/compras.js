@@ -212,27 +212,41 @@ router.get('/estaUnido', function(req, res, next) {
  *         description: Error interno del servidor.
  */
 router.post('/', (req, res, next) =>{
-  const {IdProveedor, IdComprador, IdOferta, Cantidad, Total, Descripcion, Observacion, IdEstado, MetodoPago, PagadoAProveedor, TipoCompra, IdDemanda} = req.body;
+  const {IdProveedor, IdComprador, IdOferta, Cantidad, Total, Descripcion, Observacion, IdEstado, MetodoPago, PagadoAProveedor, TipoCompra, IdDemanda, IdOpcionDescuento} = req.body;
   req.getConnection((err, conn) =>{
     if(err) return res.send(err);
-    if(IdOferta){
-
-    conn.query(
-      `INSERT INTO Compra (IdProveedor, IdComprador, IdOferta, Cantidad, Total, Descripcion, Observacion, Fecha, IdEstado, MetodoPago, PagadoAProveedor, TipoCompra) 
-        VALUES (${IdProveedor},${IdComprador},${IdOferta},${Cantidad}, ${Total}, "${Descripcion}", "${Observacion}", NOW(), ${IdEstado}, "${MetodoPago}", ${PagadoAProveedor}, "${TipoCompra}")`, 
-      (err, rows) => {
-        err? res.json(err) :  res.json({rows});
-
-    });         
-  }else if(IdDemanda){
-    conn.query(
-      `INSERT INTO Compra (IdProveedor, IdComprador, IdDemanda, Cantidad, Total, Descripcion, Observacion, Fecha, IdEstado, MetodoPago, PagadoAProveedor, TipoCompra) 
-        VALUES (${IdProveedor},${IdComprador},${IdDemanda},${Cantidad}, ${Total}, "${Descripcion}", "${Observacion}", NOW(), ${IdEstado}, "${MetodoPago}", ${PagadoAProveedor}, "${TipoCompra}")`, 
-      (err, rows) => {
-        err? res.json(err) :  res.json({rows});
-
-    });
-  }
+    const realizarInsercion = (finalTotal, finalIdOpcionDescuento) => {
+      const sqlIdOferta = IdOferta ? `${IdOferta}` : 'NULL';
+      const sqlIdDemanda = IdDemanda ? `${IdDemanda}` : 'NULL';
+      const sqlIdOpcionDescuento = finalIdOpcionDescuento ? `${finalIdOpcionDescuento}` : 'NULL';
+      conn.query(
+        `INSERT INTO Compra (IdProveedor, IdComprador, IdOferta, IdDemanda, Cantidad, Total, Descripcion, Observacion, Fecha, IdEstado, MetodoPago, PagadoAProveedor, TipoCompra, IdOpcionDescuento) 
+          VALUES (${IdProveedor},${IdComprador},${sqlIdOferta}, ${sqlIdDemanda}, ${Cantidad}, ${finalTotal}, "${Descripcion}", "${Observacion}", NOW(), ${IdEstado}, "${MetodoPago}", ${PagadoAProveedor}, "${TipoCompra}", ${sqlIdOpcionDescuento})`,
+        (err, rows) => {
+          err ? res.json(err) : res.json({ rows });
+        }
+      );
+    };
+    if(IdOpcionDescuento){
+      conn.query(`SELECT od.CostoEstrellas, od.Porcentaje, u.estrellas_acumuladas 
+                    FROM opciones_descuento od, Usuario u 
+                    WHERE od.IdOpcion = ${IdOpcionDescuento} AND u.IdUsuario = ${IdComprador}`, 
+        (err, results) => {
+            if (err) return res.json(err);
+            if (results.length === 0) return res.status(404).json({error: "Usuario o Descuento no encontrado"});
+            const { CostoEstrellas, Porcentaje, estrellas_acumuladas } = results[0];
+            if (estrellas_acumuladas < CostoEstrellas) {
+                return res.status(400).json({error: "Saldo insuficiente de estrellas", necesario: CostoEstrellas, tienes: estrellas_acumuladas});
+            }
+            const totalRebajado = Total - (Total * (Porcentaje/100));
+            conn.query(`UPDATE Usuario SET estrellas_acumuladas = estrellas_acumuladas - ${CostoEstrellas} WHERE IdUsuario = ${IdComprador}`, (errUpdate) => {
+                if(errUpdate) return res.json(errUpdate);
+                realizarInsercion(totalRebajado, IdOpcionDescuento);
+            });
+        });
+    } else {
+        realizarInsercion(Total, null);
+    }
   });
 });
 
