@@ -155,7 +155,11 @@ router.get('/estaUnido', function(req, res, next) {
  * /compras:
  *   post:
  *     summary: Crear una nueva compra
- *     description: Registra una nueva compra en el sistema. La compra debe estar vinculada a una 'IdOferta' O a una 'IdDemanda'.
+ *     description: |
+ *       Registra una nueva compra en el sistema.
+ *       - Puede estar vinculada a una 'IdOferta' O a una 'IdDemanda'.
+ *       - Soporta aplicación de descuentos mediante canje de estrellas (campo 'IdOpcionDescuento').
+ *       - Si se envía 'IdOpcionDescuento', el sistema valida el saldo de estrellas, aplica el descuento al total y resta las estrellas al usuario.
  *     tags:
  *       - Compras
  *     requestBody:
@@ -164,6 +168,14 @@ router.get('/estaUnido', function(req, res, next) {
  *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - IdProveedor
+ *               - IdComprador
+ *               - Cantidad
+ *               - Total
+ *               - IdEstado
+ *               - MetodoPago
+ *               - TipoCompra
  *             properties:
  *               IdProveedor:
  *                 type: integer
@@ -175,11 +187,15 @@ router.get('/estaUnido', function(req, res, next) {
  *               IdDemanda:
  *                 type: integer
  *                 description: ID de la demanda (opcional si se provee IdOferta).
+ *               IdOpcionDescuento:
+ *                 type: integer
+ *                 description: ID del descuento a aplicar (opcional). Si se envía, se valida y descuenta estrellas.
  *               Cantidad:
  *                 type: integer
  *               Total:
  *                 type: number
  *                 format: double
+ *                 description: El precio total original antes de descuentos.
  *               Descripcion:
  *                 type: string
  *               Observacion:
@@ -190,6 +206,7 @@ router.get('/estaUnido', function(req, res, next) {
  *                 type: string
  *               PagadoAProveedor:
  *                 type: integer
+ *                 description: 0 = No, 1 = Sí.
  *               TipoCompra:
  *                 type: string
  *                 example: "normal"
@@ -197,9 +214,10 @@ router.get('/estaUnido', function(req, res, next) {
  *               IdProveedor: 7
  *               IdComprador: 15
  *               IdOferta: 23
+ *               IdOpcionDescuento: 2
  *               Cantidad: 5
  *               Total: 249.99
- *               Descripcion: "Compra de frutas frescas"
+ *               Descripcion: "Compra de frutas frescas con descuento"
  *               Observacion: "Entrega inmediata"
  *               IdEstado: 1
  *               MetodoPago: "transferencia"
@@ -207,9 +225,33 @@ router.get('/estaUnido', function(req, res, next) {
  *               TipoCompra: "normal"
  *     responses:
  *       '200':
- *         description: Compra creada con éxito.
+ *         description: Compra creada con éxito. Retorna el objeto de la compra.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 rows:
+ *                   type: object
+ *                   description: Resultado de la inserción en la base de datos.
+ *       '400':
+ *         description: Error de validación (Saldo insuficiente de estrellas).
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 error:
+ *                   type: string
+ *                   example: "Saldo insuficiente de estrellas"
+ *                 necesario:
+ *                   type: integer
+ *                 tienes:
+ *                   type: integer
+ *       '404':
+ *         description: Usuario o Descuento no encontrado.
  *       '500':
- *         description: Error interno del servidor.
+ *         description: Error interno del servidor o de base de datos.
  */
 router.post('/', (req, res, next) =>{
   const {IdProveedor, IdComprador, IdOferta, Cantidad, Total, Descripcion, Observacion, IdEstado, MetodoPago, PagadoAProveedor, TipoCompra, IdDemanda, IdOpcionDescuento} = req.body;

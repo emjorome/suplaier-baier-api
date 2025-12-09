@@ -69,6 +69,85 @@ PREPARE stmt2 FROM @sql_fk_opcion;
 EXECUTE stmt2;
 DEALLOCATE PREPARE stmt2;
 
+-- ==========================================================
+-- 2.2. PRIMER PRODUCTO: Manzanas (Categoría 2 - Frutas)
+-- ==========================================================
+
+-- A) Insertar el Producto
+INSERT INTO producto (IdProveedor, IdCatProducto, Descripcion, Activo, UrlImg, Name, FechaCreacion, FechaModificacion, Valoracion)
+VALUES (
+    6,              -- IdProveedor
+    2,              -- IdCatProducto
+    'Manzanas rojas frescas importadas', 
+    1,              -- Activo
+    'no-img.jpeg',  -- Imagen por defecto
+    'Manzanas Gala', 
+    NOW(), 
+    NOW(), 
+    5.0             -- Valoración inicial
+);
+
+-- Guardamos el ID del producto recién creado en una variable
+SET @idProd1 = LAST_INSERT_ID();
+
+-- B) Crear la Oferta para este Producto
+INSERT INTO oferta (IdProducto, IdProveedor, IdEstadosOferta, Minimo, Maximo, Descripcion, ActualProductos, FechaLimite, FechaCreacion, FechaModificacion, Estado, ValorUProducto, ValorUInstantaneo)
+VALUES (
+    @idProd1,       -- Usamos el ID del producto creado arriba
+    6,              -- IdProveedor (Mismo que el producto)
+    1,              -- IdEstadosOferta (1 = Activa)
+    10,             -- Mínimo
+    500,            -- Máximo
+    'Oferta de Manzanas por cajón', 
+    0,              -- ActualProductos
+    '2025-12-31 23:59:59', -- Fecha Límite (Formato correcto)
+    NOW(), 
+    NOW(), 
+    1,              -- Estado
+    1.50,           -- Precio Normal
+    1.20            -- Precio Instantáneo
+);
+
+
+-- ==========================================================
+-- 2.3 SEGUNDO PRODUCTO: Cemento (Categoría 6 - Construcción)
+-- ==========================================================
+
+-- A) Insertar el Producto
+INSERT INTO producto (IdProveedor, IdCatProducto, Descripcion, Activo, UrlImg, Name, FechaCreacion, FechaModificacion, Valoracion)
+VALUES (
+    3,              -- IdProveedor
+    6,              -- IdCatProducto
+    'Saco de cemento de 50kg alta resistencia', 
+    1,              -- Activo
+    'no-img.jpeg', 
+    'Cemento Holcim', 
+    NOW(), 
+    NOW(), 
+    4.5             -- Valoración inicial
+);
+
+-- Guardamos el ID del segundo producto
+SET @idProd2 = LAST_INSERT_ID();
+
+-- B) Crear la Oferta para este Producto
+INSERT INTO oferta (IdProducto, IdProveedor, IdEstadosOferta, Minimo, Maximo, Descripcion, ActualProductos, FechaLimite, FechaCreacion, FechaModificacion, Estado, ValorUProducto, ValorUInstantaneo)
+VALUES (
+    @idProd2,       -- Usamos el ID del segundo producto
+    3,              -- IdProveedor
+    1,              -- IdEstadosOferta
+    50,             -- Mínimo
+    200,            -- Máximo
+    'Cemento al por mayor para obras', 
+    0,              -- ActualProductos
+    '2025-12-31 23:59:59', 
+    NOW(), 
+    NOW(), 
+    1, 
+    8.50,           -- Precio Normal
+    7.90            -- Precio Instantáneo
+);
+
 -- ============================================================================
 -- 3) DATOS SEMILLA - Opciones de Descuento (Bronce, Plata, Oro)
 -- ============================================================================
